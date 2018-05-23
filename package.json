@@ -7,7 +7,7 @@
   "skpm": {
     "name": "Nucleus",
     "manifest": "src/manifest.json",
-    "main": "plugin.sketchplugin",
+    "main": "Nucleus.sketchplugin",
     "assets": [
       "assets/**/*"
     ]
