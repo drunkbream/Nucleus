@@ -190,16 +190,16 @@ function getInnerShadow(style) {
 /*!***********************!*\
   !*** ./src/detach.js ***!
   \***********************/
-/*! no exports provided */
+/*! exports provided: detachAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
-/* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_common__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "detachAction", function() { return detachAction; });
+/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common.js */ "./src/common.js");
+/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_common_js__WEBPACK_IMPORTED_MODULE_0__);
 
-
-var onRun = function onRun(context) {
+function detachAction(context) {
   var document = context.document;
   var selection = context.selection;
 
@@ -214,7 +214,8 @@ var onRun = function onRun(context) {
   }
 
   getSymbolInstance(selection);
-};
+}
+;
 
 /***/ })
 

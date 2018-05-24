@@ -1,6 +1,6 @@
-import * as common from './common';
+import * as common from './common.js';
 
-export function syncAction(context) {
+export function syncAction (context) {
     var doc = context.document,
         selection = context.selection,
         nucleonsLayers = [],

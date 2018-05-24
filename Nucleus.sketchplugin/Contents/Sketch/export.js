@@ -190,17 +190,17 @@ function getInnerShadow(style) {
 /*!***********************!*\
   !*** ./src/export.js ***!
   \***********************/
-/*! no exports provided */
+/*! exports provided: exportAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
-/* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_common__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "exportAction", function() { return exportAction; });
+/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common.js */ "./src/common.js");
+/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_common_js__WEBPACK_IMPORTED_MODULE_0__);
 
-var ways = [];
-
-var onRun = function onRun(context) {
+function exportAction(context) {
+  var ways = [];
   var doc = context.document;
   var selection = context.selection;
   var allPages = doc.pages();
@@ -212,6 +212,31 @@ var onRun = function onRun(context) {
     var page = doc.pages().objectAtIndex(i);
     var artboards = page.artboards();
     getAllLayers(artboards);
+  }
+
+  function exportJSON(a, file_path, filename) {
+    var jsonName = '$' + String(filename); // Create the JSON object from the layer array
+
+    var jsonObj = {};
+    jsonObj[jsonName] = a;
+
+    function format(obj) {
+      var jsonAsStr = JSON.stringify(obj, null, 2);
+      jsonAsStr = jsonAsStr.substring(1, jsonAsStr.length - 1);
+      jsonAsStr = jsonAsStr.replace(/"/g, '').replace(/[\[\{]/g, '(').replace(/[\]\}]/g, ')').replace(/\\/g, '\'');
+      return jsonAsStr;
+    }
+
+    var formattedString = format(ways).replace(/,/g, '') + format(jsonObj); //   log(jsonObj);
+    // jsonAsStr.replace(/\"/g, '');
+    // Convert the object to a json string
+
+    var file = NSString.stringWithString(formattedString + ';'); // var scss = file.replace(/\{/g, '(').replace(/\}/g, ')');
+    // Save the file
+
+    file.writeToFile_atomically_encoding_error_(file_path + filename + ".scss", true, NSUTF8StringEncoding, null);
+    var alertMessage = jsonName + ".json saved to: " + file_path;
+    alert("SCSS MAP Exported!", alertMessage);
   }
 
   function getAllLayers(objects) {
@@ -539,32 +564,8 @@ var onRun = function onRun(context) {
       exportJSON(result, file_path, collectionName);
     }
   }
-};
-
-function exportJSON(a, file_path, filename) {
-  var jsonName = '$' + String(filename); // Create the JSON object from the layer array
-
-  var jsonObj = {};
-  jsonObj[jsonName] = a;
-
-  function format(obj) {
-    var jsonAsStr = JSON.stringify(obj, null, 2);
-    jsonAsStr = jsonAsStr.substring(1, jsonAsStr.length - 1);
-    jsonAsStr = jsonAsStr.replace(/"/g, '').replace(/[\[\{]/g, '(').replace(/[\]\}]/g, ')').replace(/\\/g, '\'');
-    return jsonAsStr;
-  }
-
-  var formattedString = format(ways).replace(/,/g, '') + format(jsonObj); //   log(jsonObj);
-  // jsonAsStr.replace(/\"/g, '');
-  // Convert the object to a json string
-
-  var file = NSString.stringWithString(formattedString + ';'); // var scss = file.replace(/\{/g, '(').replace(/\}/g, ')');
-  // Save the file
-
-  file.writeToFile_atomically_encoding_error_(file_path + filename + ".scss", true, NSUTF8StringEncoding, null);
-  var alertMessage = jsonName + ".json saved to: " + file_path;
-  alert("SCSS MAP Exported!", alertMessage);
 }
+;
 
 /***/ })
 
@@ -575,6 +576,7 @@ function exportJSON(a, file_path, filename) {
     exports[key](context);
   }
 }
+that['exportAction'] = __skpm_run.bind(this, 'exportAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=export.js.map

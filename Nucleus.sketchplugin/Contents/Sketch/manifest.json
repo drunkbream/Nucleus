@@ -11,7 +11,7 @@
       "name": "Export",
       "shortcut": "command shift b",
       "script": "export.js",
-      "handler": "onRun",
+      "handler": "exportAction",
       "identifier": "Export"
     },
     {
@@ -19,21 +19,21 @@
       "shortcut": "command shift i",
       "script": "sync.js",
       "handler": "onRun",
-      "identifier": "Sync"
+      "identifier": "syncAction"
     },
     {
       "name": "Detach",
       "shortcut": "command shift d",
       "script": "detach.js",
       "handler": "onRun",
-      "identifier": "Detach"
+      "identifier": "detachAction"
     },
     {
       "name": "Rename",
       "shortcut": "command shift p",
       "script": "rename.js",
       "handler": "onRun",
-      "identifier": "Rename"
+      "identifier": "renameAction"
     }
   ],
   "menu": {
@@ -46,5 +46,5 @@
     "title": "."
   },
   "disableCocoaScriptPreprocessor": true,
-  "appcast": "https://raw.githubusercontent.com/levtolstoi/Nucleus/master/.appcast.xml"
+  "appcast": "https://raw.githubusercontent.com//master/.appcast.xml"
 }

@@ -1,6 +1,6 @@
-import * as common from './common';
+import * as common from './common.js';
 
-export function detachAction(context) {
+export function detachAction (context) {
   var document = context.document;
   var selection = context.selection;
 

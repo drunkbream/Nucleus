@@ -1,7 +1,7 @@
-import * as common from './common';
+import * as common from './common.js';
 
 
-export function exportAction(context) {
+export function exportAction (context) {
   var ways = [];
   var doc = context.document;
   var selection = context.selection;

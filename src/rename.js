@@ -1,6 +1,6 @@
-import * as common from './common';
+import * as common from './common.js';
 
-export function renameAction(context) {
+export function renameAction (context) {
   var selection = context.selection;
   var layers = [];
 

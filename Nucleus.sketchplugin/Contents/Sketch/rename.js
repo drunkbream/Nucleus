@@ -190,16 +190,16 @@ function getInnerShadow(style) {
 /*!***********************!*\
   !*** ./src/rename.js ***!
   \***********************/
-/*! no exports provided */
+/*! exports provided: renameAction */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
-/* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_common__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renameAction", function() { return renameAction; });
+/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common.js */ "./src/common.js");
+/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_common_js__WEBPACK_IMPORTED_MODULE_0__);
 
-
-var onRun = function onRun(context) {
+function renameAction(context) {
   var selection = context.selection;
   var layers = [];
 
@@ -351,7 +351,8 @@ var onRun = function onRun(context) {
 
   getLayers(selection);
   createDialog(context);
-};
+}
+;
 
 /***/ })
 
