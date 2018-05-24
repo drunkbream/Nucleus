@@ -1,13 +1,13 @@
 {
-  "name": ".",
+  "name": "Nucleus",
   "version": "0.1.0",
   "engines": {
     "sketch": ">=3.0"
   },
   "skpm": {
-    "name": ".",
+    "name": "Nucleus",
     "manifest": "src/manifest.json",
-    "main": "plugin.sketchplugin",
+    "main": "Nucleus.sketchplugin",
     "assets": [
       "assets/**/*"
     ]

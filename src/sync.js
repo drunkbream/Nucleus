@@ -1,4 +1,4 @@
-import * as common from './common.js';
+import * as common from './common';
 
 export function syncAction (context) {
     var doc = context.document,
@@ -9,7 +9,7 @@ export function syncAction (context) {
         sharedStyles = context.document.documentData().layerStyles().sharedStyles();
 
         function separator(layer) {
-            var names = tagAndNames(layer);
+            var names = common.tagAndNames(layer);
             if (names.name == 'nucleon') {
                 nucleonsLayers.push(layer);
             } else if (names.tags) {
@@ -20,7 +20,7 @@ export function syncAction (context) {
         function getInnerLayers(objects) {
             var result = [];
             objects.forEach(function(obj) {
-                if (isSymbolMaster(obj) || isGroup(obj)) {
+                if (common.isSymbolMaster(obj) || common.isGroup(obj)) {
                     getInnerLayers(obj.layers())
                 } else {
                     separator(obj);
@@ -116,7 +116,7 @@ export function syncAction (context) {
     }
 
     function nucleonProps(nucleon) {
-        var tagName = getAllTags(nucleon.name());
+        var tagName = common.getAllTags(nucleon.name());
         var key = tagName[1].charAt(0);
 
         return {
@@ -134,7 +134,7 @@ export function syncAction (context) {
         var values = {};
 
         nucleons.forEach((nucleon) => {
-            var nucleonName = getAllTags(nucleon.name());
+            var nucleonName = common.getAllTags(nucleon.name());
             var tagName = nucleonName[1];
             values[tagName] = nucleonProps(nucleon);
         })
@@ -150,7 +150,7 @@ export function syncAction (context) {
         } else {
           layer.addAttribute_value("MSAttributedStringTextTransformAttribute", 0);
         }
-        layer.setCharacterSpacing(obj.textKern());
+        layer.setCharacterSpacing(obj.textKern);
         layer.setFontPostscriptName(obj.fontName);
         layer.setFontSize(obj.fontSize);
         layer.setLineHeight(obj.lineHeight);

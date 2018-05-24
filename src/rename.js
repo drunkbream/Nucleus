@@ -1,4 +1,4 @@
-import * as common from './common.js';
+import * as common from './common';
 
 export function renameAction (context) {
   var selection = context.selection;
@@ -38,7 +38,7 @@ export function renameAction (context) {
   //   var result = [];
   //
   //   layers.forEach(function(layer){
-  //     var names = tagAndNames(layer);
+  //     var names = common.tagAndNames(layer);
   //     var tagsOnLayer = [];
   //
   //     names.tags == true ? tagsOnLayer.push(layer.name().split('#').slice(1)) : null;
@@ -116,7 +116,7 @@ export function renameAction (context) {
       layers.forEach(function(layer){
         var layerName = layer.name();
 
-        if (isSymbolInstance(layer) && checkboxCreateSymbols == 1) {
+        if (common.isSymbolInstance(layer) && checkboxCreateSymbols == 1) {
              // Create symbol from layers and don't send to symbol page
              var detachedSymbolLayer = layer.detachByReplacingWithGroup();
              var symbolLayers = MSLayerArray.arrayWithLayers([detachedSymbolLayer]);
@@ -132,7 +132,7 @@ export function renameAction (context) {
                // Remove symbol instance
                // symbolInstance.removeFromParent();
              }
-        } else if (isSymbolInstance(layer) && checkboxTotalRenameSymbols == 1) {
+        } else if (common.isSymbolInstance(layer) && checkboxTotalRenameSymbols == 1) {
           var instanceBrothers = layer.symbolMaster().allInstances();
 
           instanceBrothers.forEach((inst) => {
@@ -140,7 +140,7 @@ export function renameAction (context) {
           })
           layer.symbolMaster().name = layerName.replace(fromName, toName);
           layer.name = layerName.replace(fromName, toName);
-        } else if (!isSymbolMaster(layer)) {
+        } else if (!common.isSymbolMaster(layer)) {
           layer.name = layerName.replace(fromName, toName);
         }
       })
@@ -152,12 +152,12 @@ export function renameAction (context) {
 
   function getLayers(l){
     l.forEach(function(layer){
-      if (isGroup(layer)) {
+      if (common.isGroup(layer)) {
         var groupLayers = layer.layers();
 
         layers.push(layer);
         getLayers(groupLayers);
-      } else if (isSymbolInstance(layer)) {
+      } else if (common.isSymbolInstance(layer)) {
         var master = layer.symbolMaster();
         layers.push(layer);
         layers.push(master);

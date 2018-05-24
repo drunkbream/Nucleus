@@ -80,88 +80,92 @@ var exports =
 /*!***********************!*\
   !*** ./src/common.js ***!
   \***********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: isPage, isArtboard, isSymbolMaster, isSymbolInstance, isSymbol, isGroup, isLayer, isText, alert, getFirstTag, getAllTags, getAllTagsWithoutName, getPropName, getPropVal, tagAndNames, rgbaCode, getShadow, getInnerShadow */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isPage", function() { return isPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isArtboard", function() { return isArtboard; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSymbolMaster", function() { return isSymbolMaster; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSymbolInstance", function() { return isSymbolInstance; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSymbol", function() { return isSymbol; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isGroup", function() { return isGroup; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isLayer", function() { return isLayer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isText", function() { return isText; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "alert", function() { return alert; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getFirstTag", function() { return getFirstTag; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllTags", function() { return getAllTags; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllTagsWithoutName", function() { return getAllTagsWithoutName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPropName", function() { return getPropName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPropVal", function() { return getPropVal; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tagAndNames", function() { return tagAndNames; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rgbaCode", function() { return rgbaCode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getShadow", function() { return getShadow; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getInnerShadow", function() { return getInnerShadow; });
 function isPage(layer) {
   return layer.class() == MSPage;
 }
-
 function isArtboard(layer) {
   return layer.class() == MSArtboardGroup;
 }
-
 function isSymbolMaster(layer) {
   return layer.class() == MSSymbolMaster;
 }
-
 function isSymbolInstance(layer) {
   return layer.class() == MSSymbolInstance;
 }
-
 function isSymbol(layer) {
   return layer.class() == MSSymbolInstance || layer.class() == MSSymbolMaster;
 }
-
 function isGroup(layer) {
   return layer.class() == MSLayerGroup;
 }
-
 function isLayer(layer) {
   return !isGroup(layer) && !isText(layer);
 } // MSTextLayer
 
-
 function isText(layer) {
   return layer.class() == MSTextLayer;
 }
-
 function alert(title, message) {
   var app = NSApplication.sharedApplication();
   app.displayDialog_withTitle_(message, title);
 }
-
 function getFirstTag(str) {
   return str.match(/[^#\ ^\.]+/g);
 }
-
 function getAllTags(str) {
   return str.match(/[^#\ ^\.]+/g);
 }
-
 function getAllTagsWithoutName(str) {
   return str.match(/#([^#\ ^\.]+)/);
 }
-
 function getPropName(str) {
   var split = str.match(/(.+)\:\s*(.+)/);
   return split[1];
 }
-
 function getPropVal(str) {
   var split = str.match(/(.+)\:\s*(.+)/);
   return split[2];
 }
-
 function tagAndNames(layer) {
   var fullLayerName = layer.name(),
       splitName = getAllTags(fullLayerName),
-      layerName = splitName == null ? fullLayerName : splitName[0];
-  inTag = getAllTagsWithoutName(fullLayerName) ? true : false;
+      layerName = splitName == null ? fullLayerName : splitName[0],
+      inTag = getAllTagsWithoutName(fullLayerName) ? true : false;
   return {
     fullName: fullLayerName,
     tags: inTag,
     name: layerName
   };
 }
-
 function rgbaCode(color) {
   var red = Math.round(color.red() * 255);
   var green = Math.round(color.green() * 255);
   var blue = Math.round(color.blue() * 255);
   return 'rgba(' + red + ',' + green + ',' + blue + ',' + color.alpha() + ')';
 }
-
 function getShadow(style) {
   var shadows = style.enabledShadows();
   var len = shadows.length;
@@ -172,7 +176,6 @@ function getShadow(style) {
     return shadows[len - 1];
   }
 }
-
 function getInnerShadow(style) {
   var shadows = style.enabledInnerShadows();
   var len = shadows.length;
@@ -196,8 +199,7 @@ function getInnerShadow(style) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "exportAction", function() { return exportAction; });
-/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common.js */ "./src/common.js");
-/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_common_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
 function exportAction(context) {
   var ways = [];
@@ -236,21 +238,23 @@ function exportAction(context) {
 
     file.writeToFile_atomically_encoding_error_(file_path + filename + ".scss", true, NSUTF8StringEncoding, null);
     var alertMessage = jsonName + ".json saved to: " + file_path;
-    alert("SCSS MAP Exported!", alertMessage);
+    _common__WEBPACK_IMPORTED_MODULE_0__["alert"]("SCSS MAP Exported!", alertMessage);
   }
+
+  ;
 
   function getAllLayers(objects) {
     objects.forEach(function (obj) {
       var objectID = obj.objectID();
 
-      if (isArtboard(obj)) {
+      if (_common__WEBPACK_IMPORTED_MODULE_0__["isArtboard"](obj)) {
         var layers = obj.layers();
         getAllLayers(layers); //need alert Please create the artboard
-      } else if (isSymbolMaster(obj)) {
+      } else if (_common__WEBPACK_IMPORTED_MODULE_0__["isSymbolMaster"](obj)) {
         var layers = obj.layers();
         allLayers.push(obj);
         getAllLayers(layers);
-      } else if (isGroup(obj)) {
+      } else if (_common__WEBPACK_IMPORTED_MODULE_0__["isGroup"](obj)) {
         var layers = obj.layers();
         allLayers.push(obj);
         getAllLayers(layers);
@@ -320,15 +324,15 @@ function exportAction(context) {
   function getnucleonPropVal(layer, nucleonPropName) {
     var nucleonPropValues = {};
 
-    if (isText(layer)) {
+    if (_common__WEBPACK_IMPORTED_MODULE_0__["isText"](layer)) {
       nucleonPropValues = {
-        'color': rgbaCode(layer.textColor())
+        'color': _common__WEBPACK_IMPORTED_MODULE_0__["rgbaCode"](layer.textColor())
       };
     } else {
       nucleonPropValues = {
         'height': layer.frame().height() + 'px',
         'width': layer.frame().width() + 'px',
-        'background': rgbaCode(layer.style().firstEnabledFill().color()),
+        'background': _common__WEBPACK_IMPORTED_MODULE_0__["rgbaCode"](layer.style().firstEnabledFill().color()),
         'border-radius': getRadius(layer),
         'box-shadow': getShadows(layer)
       };
@@ -341,24 +345,6 @@ function exportAction(context) {
 
   function getFirstTag(str) {
     return str.match(/[^#\ ^\.]+/g);
-  }
-
-  function getAllTags(str) {
-    return str.match(/[^#\ ^\.]+/g);
-  }
-
-  function getAllTagsWithoutName(str) {
-    return str.match(/#([^#\ ^\.]+)/);
-  }
-
-  function getPropName(str) {
-    var split = str.match(/(.+)\:\s*(.+)/);
-    return split[1];
-  }
-
-  function getPropVal(str) {
-    var split = str.match(/(.+)\:\s*(.+)/);
-    return split[2];
   }
 
   function fontWeight(attr) {
@@ -380,7 +366,7 @@ function exportAction(context) {
     for (var i = 0; i < allLayers.length; i++) {
       var layer = allLayers[i],
           fullLayerName = String(layer.name()),
-          splitName = getAllTags(fullLayerName),
+          splitName = _common__WEBPACK_IMPORTED_MODULE_0__["getAllTags"](fullLayerName),
           layerName = splitName == null ? fullLayerName : splitName[0];
 
       if (splitName != null && layerName == 'nucleon') {
@@ -402,7 +388,7 @@ function exportAction(context) {
           if (tag == tagName && key == 't' || tag == tagName && key == 'c') {
             var res;
             attrs.forEach(function (attr) {
-              var attrName = getPropName(attr);
+              var attrName = _common__WEBPACK_IMPORTED_MODULE_0__["getPropName"](attr);
 
               if (key == 't') {
                 nucleonVars.push(attrName + ': mdg($' + parentGroupName + ', ' + tagName.replace(/\#/g, '') + ', ' + attrName + ')');
@@ -428,10 +414,10 @@ function exportAction(context) {
     var cssShadows = '';
     var cssInnerShadows = '';
     shadows.forEach(function (s) {
-      cssShadows += s.offsetX() + 'px ' + s.offsetY() + 'px ' + s.blurRadius() + 'px ' + s.spread() + 'px ' + rgbaCode(s.color()) + ', ';
+      cssShadows += s.offsetX() + 'px ' + s.offsetY() + 'px ' + s.blurRadius() + 'px ' + s.spread() + 'px ' + _common__WEBPACK_IMPORTED_MODULE_0__["rgbaCode"](s.color()) + ', ';
     });
     innerShadows.forEach(function (s) {
-      cssInnerShadows += 'inset ' + s.offsetX() + 'px ' + s.offsetY() + 'px ' + s.blurRadius() + 'px ' + s.spread() + 'px ' + rgbaCode(s.color()) + ', ';
+      cssInnerShadows += 'inset ' + s.offsetX() + 'px ' + s.offsetY() + 'px ' + s.blurRadius() + 'px ' + s.spread() + 'px ' + _common__WEBPACK_IMPORTED_MODULE_0__["rgbaCode"](s.color()) + ', ';
     });
 
     if (cssShadows && !cssInnerShadows) {
@@ -459,25 +445,25 @@ function exportAction(context) {
 
   function layerAttrsBuilder(layer) {
     var fullLayerName = layer.name(),
-        splitName = getAllTags(fullLayerName),
+        splitName = _common__WEBPACK_IMPORTED_MODULE_0__["getAllTags"](fullLayerName),
         layerName = splitName == null ? fullLayerName : splitName[0],
         tagsNames = fullLayerName.split("#").slice(1),
         nucleonAttrsObj = {},
         attrsObj = {},
-        rawAttrs = layer.CSSAttributes().slice(1, -1);
-    attrs = [];
+        rawAttrs = layer.CSSAttributes().slice(1, -1),
+        attrs = [];
     rawAttrs.forEach(function (attr) {
       attrs.push(attr.replace(/;/g, ''));
     });
 
-    if (!isText(layer) && !isSymbolInstance(layer)) {
+    if (!_common__WEBPACK_IMPORTED_MODULE_0__["isText"](layer) && !_common__WEBPACK_IMPORTED_MODULE_0__["isSymbolInstance"](layer)) {
       var boxShadow = getShadows(layer) ? 'box-shadow: ' + getShadows(layer) : 'box-shadow: none';
       var radius = 'border-radius: ' + getRadius(layer);
       attrs.splice(attrs.length, 0, 'height: ' + layer.frame().height() + 'px', 'width: ' + layer.frame().width() + 'px', radius, boxShadow);
-    } else if (isText(layer)) {
+    } else if (_common__WEBPACK_IMPORTED_MODULE_0__["isText"](layer)) {
       var attrFontWeight;
       attrs.forEach(function (attr) {
-        if (getPropName(attr) == 'font-family') {
+        if (_common__WEBPACK_IMPORTED_MODULE_0__["getPropName"](attr) == 'font-family') {
           attrFontWeight = fontWeight(attr);
         }
       });
@@ -490,9 +476,9 @@ function exportAction(context) {
         var key = tagName.charAt(0);
         var nucleonPropName = nucleonPropNames[key];
         attrs.forEach(function (attr, index) {
-          if (isText(layer) && key == 't') {
+          if (_common__WEBPACK_IMPORTED_MODULE_0__["isText"](layer) && key == 't') {
             layerName == 'nucleon' ? nucleonAttrsObj[tagName] = attrs : attrs = getVariable(tag, attrs);
-          } else if (getPropName(attr) == nucleonPropName) {
+          } else if (_common__WEBPACK_IMPORTED_MODULE_0__["getPropName"](attr) == nucleonPropName) {
             layerName == 'nucleon' ? nucleonAttrsObj[tagName] = getnucleonPropVal(layer, nucleonPropName) : attrs[index] = getVariable(tag, attrs);
           }
         });
@@ -507,7 +493,7 @@ function exportAction(context) {
 
     attrsObj[layerName] = attrs;
 
-    if (isText(layer) || layerName == 'nucleon') {
+    if (_common__WEBPACK_IMPORTED_MODULE_0__["isText"](layer) || layerName == 'nucleon') {
       return nucleonAttrsObj;
     } else {
       return attrsObj;
@@ -524,28 +510,28 @@ function exportAction(context) {
 
   function builderData(layer, result) {
     var fullLayerName = layer.name(),
-        splitName = getAllTags(fullLayerName),
+        splitName = _common__WEBPACK_IMPORTED_MODULE_0__["getAllTags"](fullLayerName),
         layerName = splitName == null ? fullLayerName : splitName[0];
 
-    if (isSymbolInstance(layer)) {
+    if (_common__WEBPACK_IMPORTED_MODULE_0__["isSymbolInstance"](layer)) {
       layer.symbolMaster().layers().forEach(function (symbolLayer) {
-        if (isSymbolInstance(symbolLayer)) {
-          alert("ERROR!", 'Put embedded symbol "' + symbolLayer.name() + '" in a symbol-master group.');
+        if (_common__WEBPACK_IMPORTED_MODULE_0__["isSymbolInstance"](symbolLayer)) {
+          _common__WEBPACK_IMPORTED_MODULE_0__["alert"]("ERROR!", 'Put embedded symbol "' + symbolLayer.name() + '" in a symbol-master group.');
         } else {
           var fullSymbolLayerName = symbolLayer.name();
-          var symbolSplitName = getAllTags(fullSymbolLayerName);
+          var symbolSplitName = _common__WEBPACK_IMPORTED_MODULE_0__["getAllTags"](fullSymbolLayerName);
           var symbolLayerName = symbolSplitName == null ? fullSymbolLayerName : symbolSplitName[0];
           var deepCollection = symbolLayer.layers();
           result[symbolLayerName] = {};
           buildData(deepCollection, result[symbolLayerName]);
         }
       });
-    } else if (isGroup(layer)) {
+    } else if (_common__WEBPACK_IMPORTED_MODULE_0__["isGroup"](layer)) {
       var deepCollection = layer.layers(); // log(layerName);
 
       result[layerName] = {};
       buildData(deepCollection, result[layerName]);
-    } else if (isText(layer) || isLayer(layer)) {
+    } else if (_common__WEBPACK_IMPORTED_MODULE_0__["isText"](layer) || _common__WEBPACK_IMPORTED_MODULE_0__["isLayer"](layer)) {
       result = Object.assign(result, layerAttrsBuilder(layer));
     }
   } //loop through the selected layers and export the XML
@@ -555,8 +541,8 @@ function exportAction(context) {
     var selectedLayer = selection[i],
         collectionName = String(selectedLayer.name());
 
-    if (!isGroup(selectedLayer)) {
-      alert("ERROR!", "Please select a group.");
+    if (!_common__WEBPACK_IMPORTED_MODULE_0__["isGroup"](selectedLayer)) {
+      _common__WEBPACK_IMPORTED_MODULE_0__["alert"]("ERROR!", "Please select a group.");
     } else {
       var collection = selectedLayer.layers(),
           result = {};

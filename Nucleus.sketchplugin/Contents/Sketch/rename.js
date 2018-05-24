@@ -80,88 +80,92 @@ var exports =
 /*!***********************!*\
   !*** ./src/common.js ***!
   \***********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: isPage, isArtboard, isSymbolMaster, isSymbolInstance, isSymbol, isGroup, isLayer, isText, alert, getFirstTag, getAllTags, getAllTagsWithoutName, getPropName, getPropVal, tagAndNames, rgbaCode, getShadow, getInnerShadow */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isPage", function() { return isPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isArtboard", function() { return isArtboard; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSymbolMaster", function() { return isSymbolMaster; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSymbolInstance", function() { return isSymbolInstance; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSymbol", function() { return isSymbol; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isGroup", function() { return isGroup; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isLayer", function() { return isLayer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isText", function() { return isText; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "alert", function() { return alert; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getFirstTag", function() { return getFirstTag; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllTags", function() { return getAllTags; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllTagsWithoutName", function() { return getAllTagsWithoutName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPropName", function() { return getPropName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPropVal", function() { return getPropVal; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tagAndNames", function() { return tagAndNames; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rgbaCode", function() { return rgbaCode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getShadow", function() { return getShadow; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getInnerShadow", function() { return getInnerShadow; });
 function isPage(layer) {
   return layer.class() == MSPage;
 }
-
 function isArtboard(layer) {
   return layer.class() == MSArtboardGroup;
 }
-
 function isSymbolMaster(layer) {
   return layer.class() == MSSymbolMaster;
 }
-
 function isSymbolInstance(layer) {
   return layer.class() == MSSymbolInstance;
 }
-
 function isSymbol(layer) {
   return layer.class() == MSSymbolInstance || layer.class() == MSSymbolMaster;
 }
-
 function isGroup(layer) {
   return layer.class() == MSLayerGroup;
 }
-
 function isLayer(layer) {
   return !isGroup(layer) && !isText(layer);
 } // MSTextLayer
 
-
 function isText(layer) {
   return layer.class() == MSTextLayer;
 }
-
 function alert(title, message) {
   var app = NSApplication.sharedApplication();
   app.displayDialog_withTitle_(message, title);
 }
-
 function getFirstTag(str) {
   return str.match(/[^#\ ^\.]+/g);
 }
-
 function getAllTags(str) {
   return str.match(/[^#\ ^\.]+/g);
 }
-
 function getAllTagsWithoutName(str) {
   return str.match(/#([^#\ ^\.]+)/);
 }
-
 function getPropName(str) {
   var split = str.match(/(.+)\:\s*(.+)/);
   return split[1];
 }
-
 function getPropVal(str) {
   var split = str.match(/(.+)\:\s*(.+)/);
   return split[2];
 }
-
 function tagAndNames(layer) {
   var fullLayerName = layer.name(),
       splitName = getAllTags(fullLayerName),
-      layerName = splitName == null ? fullLayerName : splitName[0];
-  inTag = getAllTagsWithoutName(fullLayerName) ? true : false;
+      layerName = splitName == null ? fullLayerName : splitName[0],
+      inTag = getAllTagsWithoutName(fullLayerName) ? true : false;
   return {
     fullName: fullLayerName,
     tags: inTag,
     name: layerName
   };
 }
-
 function rgbaCode(color) {
   var red = Math.round(color.red() * 255);
   var green = Math.round(color.green() * 255);
   var blue = Math.round(color.blue() * 255);
   return 'rgba(' + red + ',' + green + ',' + blue + ',' + color.alpha() + ')';
 }
-
 function getShadow(style) {
   var shadows = style.enabledShadows();
   var len = shadows.length;
@@ -172,7 +176,6 @@ function getShadow(style) {
     return shadows[len - 1];
   }
 }
-
 function getInnerShadow(style) {
   var shadows = style.enabledInnerShadows();
   var len = shadows.length;
@@ -196,8 +199,7 @@ function getInnerShadow(style) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renameAction", function() { return renameAction; });
-/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common.js */ "./src/common.js");
-/* harmony import */ var _common_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_common_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.js");
 
 function renameAction(context) {
   var selection = context.selection;
@@ -236,7 +238,7 @@ function renameAction(context) {
   //   var result = [];
   //
   //   layers.forEach(function(layer){
-  //     var names = tagAndNames(layer);
+  //     var names = common.tagAndNames(layer);
   //     var tagsOnLayer = [];
   //
   //     names.tags == true ? tagsOnLayer.push(layer.name().split('#').slice(1)) : null;
@@ -302,7 +304,7 @@ function renameAction(context) {
       layers.forEach(function (layer) {
         var layerName = layer.name();
 
-        if (isSymbolInstance(layer) && checkboxCreateSymbols == 1) {
+        if (_common__WEBPACK_IMPORTED_MODULE_0__["isSymbolInstance"](layer) && checkboxCreateSymbols == 1) {
           // Create symbol from layers and don't send to symbol page
           var detachedSymbolLayer = layer.detachByReplacingWithGroup();
           var symbolLayers = MSLayerArray.arrayWithLayers([detachedSymbolLayer]);
@@ -316,14 +318,14 @@ function renameAction(context) {
             symbolMaster.setLayerListExpandedType(1); // Remove symbol instance
             // symbolInstance.removeFromParent();
           }
-        } else if (isSymbolInstance(layer) && checkboxTotalRenameSymbols == 1) {
+        } else if (_common__WEBPACK_IMPORTED_MODULE_0__["isSymbolInstance"](layer) && checkboxTotalRenameSymbols == 1) {
           var instanceBrothers = layer.symbolMaster().allInstances();
           instanceBrothers.forEach(function (inst) {
             inst.name = layerName.replace(fromName, toName);
           });
           layer.symbolMaster().name = layerName.replace(fromName, toName);
           layer.name = layerName.replace(fromName, toName);
-        } else if (!isSymbolMaster(layer)) {
+        } else if (!_common__WEBPACK_IMPORTED_MODULE_0__["isSymbolMaster"](layer)) {
           layer.name = layerName.replace(fromName, toName);
         }
       }); // createDialog(context);
@@ -334,11 +336,11 @@ function renameAction(context) {
 
   function getLayers(l) {
     l.forEach(function (layer) {
-      if (isGroup(layer)) {
+      if (_common__WEBPACK_IMPORTED_MODULE_0__["isGroup"](layer)) {
         var groupLayers = layer.layers();
         layers.push(layer);
         getLayers(groupLayers);
-      } else if (isSymbolInstance(layer)) {
+      } else if (_common__WEBPACK_IMPORTED_MODULE_0__["isSymbolInstance"](layer)) {
         var master = layer.symbolMaster();
         layers.push(layer);
         layers.push(master);
@@ -363,6 +365,7 @@ function renameAction(context) {
     exports[key](context);
   }
 }
+that['renameAction'] = __skpm_run.bind(this, 'renameAction');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
 //# sourceMappingURL=rename.js.map

@@ -1,4 +1,4 @@
-import * as common from './common.js';
+import * as common from './common';
 
 export function detachAction (context) {
   var document = context.document;
@@ -6,9 +6,9 @@ export function detachAction (context) {
 
   function getSymbolInstance(selection){
     selection.forEach(function(selected){
-      if (isGroup(selected)) {
+      if (common.isGroup(selected)) {
         getSymbolInstance(selected.layers());
-      } else if (isSymbolInstance(selected)) {
+      } else if (common.isSymbolInstance(selected)) {
         selected.detachByReplacingWithGroup().setLayerListExpandedType(1);
       }
     });

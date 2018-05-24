@@ -18,22 +18,22 @@
       "name": "Sync",
       "shortcut": "command shift i",
       "script": "sync.js",
-      "handler": "onRun",
-      "identifier": "syncAction"
+      "handler": "syncAction",
+      "identifier": "Sync"
     },
     {
       "name": "Detach",
       "shortcut": "command shift d",
       "script": "detach.js",
-      "handler": "onRun",
-      "identifier": "detachAction"
+      "handler": "detachAction",
+      "identifier": "Detach"
     },
     {
       "name": "Rename",
       "shortcut": "command shift p",
       "script": "rename.js",
-      "handler": "onRun",
-      "identifier": "renameAction"
+      "handler": "renameAction",
+      "identifier": "Rename"
     }
   ],
   "menu": {
@@ -42,8 +42,7 @@
       "Export",
       "Detach",
       "Rename"
-    ],
-    "title": "."
+    ]
   },
   "disableCocoaScriptPreprocessor": true,
   "appcast": "https://raw.githubusercontent.com//master/.appcast.xml"

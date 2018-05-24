@@ -1,4 +1,4 @@
-import * as common from './common.js';
+import * as common from './common';
 
 
 export function exportAction (context) {
@@ -43,26 +43,26 @@ export function exportAction (context) {
     file.writeToFile_atomically_encoding_error_( file_path + filename + ".scss"  ,true  ,NSUTF8StringEncoding  ,null);
 
     var alertMessage = jsonName+".json saved to: " + file_path;
-    alert("SCSS MAP Exported!", alertMessage);
-  }
+    common.alert("SCSS MAP Exported!", alertMessage);
+  };
 
   function getAllLayers(objects){
     objects.forEach(function(obj){
       var objectID = obj.objectID();
 
-      if (isArtboard(obj)) {
+      if (common.isArtboard(obj)) {
         var layers = obj.layers();
 
         getAllLayers(layers);
         //need alert Please create the artboard
       }
-      else if (isSymbolMaster(obj)) {
+      else if (common.isSymbolMaster(obj)) {
         var layers = obj.layers();
 
         allLayers.push(obj);
         getAllLayers(layers);
       }
-      else if (isGroup(obj)) {
+      else if (common.isGroup(obj)) {
         var layers = obj.layers();
 
         allLayers.push(obj);
@@ -141,13 +141,13 @@ export function exportAction (context) {
    function getnucleonPropVal(layer, nucleonPropName) {
       var nucleonPropValues = {};
 
-      if (isText(layer)) {
-        nucleonPropValues = { 'color': rgbaCode(layer.textColor()) }
+      if (common.isText(layer)) {
+        nucleonPropValues = { 'color': common.rgbaCode(layer.textColor()) }
       } else {
         nucleonPropValues = {
            'height': layer.frame().height() + 'px',
            'width': layer.frame().width() + 'px',
-           'background': rgbaCode(layer.style().firstEnabledFill().color()),
+           'background': common.rgbaCode(layer.style().firstEnabledFill().color()),
            'border-radius': getRadius(layer),
            'box-shadow': getShadows(layer),
         }
@@ -160,24 +160,6 @@ export function exportAction (context) {
 
   function getFirstTag(str){
     return str.match(/[^#\ ^\.]+/g);
-  }
-
-  function getAllTags(str){
-    return str.match(/[^#\ ^\.]+/g);
-  }
-
-  function getAllTagsWithoutName(str){
-     return str.match(/#([^#\ ^\.]+)/);
-  }
-
-  function getPropName(str){
-    var split = str.match(/(.+)\:\s*(.+)/);
-    return split[1];
-  }
-
-  function getPropVal(str){
-    var split = str.match(/(.+)\:\s*(.+)/);
-    return split[2];
   }
 
   function fontWeight(attr){
@@ -197,7 +179,7 @@ export function exportAction (context) {
      for (var i = 0; i < allLayers.length; i++) {
         var layer = allLayers[i],
             fullLayerName = String(layer.name()),
-            splitName = getAllTags(fullLayerName),
+            splitName = common.getAllTags(fullLayerName),
             layerName = splitName == null ? fullLayerName : splitName[0];
 
       if (splitName != null && layerName == 'nucleon') {
@@ -220,7 +202,7 @@ export function exportAction (context) {
               var res;
 
               attrs.forEach(function(attr){
-                  var attrName = getPropName(attr);
+                  var attrName = common.getPropName(attr);
 
                   if (key == 't') {
                       nucleonVars.push(attrName + ': mdg($' + parentGroupName + ', ' + tagName.replace(/\#/g, '') + ', ' +  attrName + ')');
@@ -248,11 +230,11 @@ export function exportAction (context) {
     var cssInnerShadows = '';
 
     shadows.forEach(function(s){
-        cssShadows += s.offsetX() + 'px ' + s.offsetY() + 'px ' + s.blurRadius() + 'px ' + s.spread() + 'px ' + rgbaCode(s.color()) + ', ';
+        cssShadows += s.offsetX() + 'px ' + s.offsetY() + 'px ' + s.blurRadius() + 'px ' + s.spread() + 'px ' + common.rgbaCode(s.color()) + ', ';
     })
 
     innerShadows.forEach(function(s){
-        cssInnerShadows += 'inset ' + s.offsetX() + 'px ' + s.offsetY() + 'px ' + s.blurRadius() + 'px ' + s.spread() + 'px ' + rgbaCode(s.color()) + ', ';
+        cssInnerShadows += 'inset ' + s.offsetX() + 'px ' + s.offsetY() + 'px ' + s.blurRadius() + 'px ' + s.spread() + 'px ' + common.rgbaCode(s.color()) + ', ';
     })
 
     if (cssShadows && !cssInnerShadows) {
@@ -285,19 +267,19 @@ export function exportAction (context) {
 
   function layerAttrsBuilder(layer) {
     var fullLayerName = layer.name(),
-        splitName = getAllTags(fullLayerName),
+        splitName = common.getAllTags(fullLayerName),
         layerName = splitName == null ? fullLayerName : splitName[0],
         tagsNames = fullLayerName.split("#").slice(1),
         nucleonAttrsObj = {},
         attrsObj = {},
-        rawAttrs = layer.CSSAttributes().slice(1, -1);
+        rawAttrs = layer.CSSAttributes().slice(1, -1),
         attrs = [];
 
         rawAttrs.forEach(function(attr){
             attrs.push(attr.replace(/;/g, ''));
         })
 
-    if (!isText(layer) && !isSymbolInstance(layer)) {
+    if (!common.isText(layer) && !common.isSymbolInstance(layer)) {
         var boxShadow = getShadows(layer) ? 'box-shadow: ' + getShadows(layer) : 'box-shadow: none';
         var radius = 'border-radius: ' + getRadius(layer);
 
@@ -307,11 +289,11 @@ export function exportAction (context) {
           radius,
           boxShadow,
         );
-    } else if (isText(layer)) {
+    } else if (common.isText(layer)) {
       var attrFontWeight;
 
       attrs.forEach(function(attr) {
-        if (getPropName(attr) == 'font-family') {
+        if (common.getPropName(attr) == 'font-family') {
           attrFontWeight = fontWeight(attr);
         }
       })
@@ -329,10 +311,10 @@ export function exportAction (context) {
             var nucleonPropName = nucleonPropNames[key];
 
             attrs.forEach(function(attr, index){
-                    if (isText(layer) && key == 't') {
+                    if (common.isText(layer) && key == 't') {
                       layerName == 'nucleon' ? nucleonAttrsObj[tagName] = attrs : attrs = getVariable(tag, attrs);
                     }
-                    else if (getPropName(attr) == nucleonPropName){
+                    else if (common.getPropName(attr) == nucleonPropName){
                       layerName == 'nucleon' ? nucleonAttrsObj[tagName] = getnucleonPropVal(layer, nucleonPropName) : attrs[index] = getVariable(tag, attrs);
                     }
             })
@@ -347,7 +329,7 @@ export function exportAction (context) {
 
     attrsObj[layerName] = attrs;
 
-    if (isText(layer) || layerName == 'nucleon') {
+    if (common.isText(layer) || layerName == 'nucleon') {
       return nucleonAttrsObj;
     }
     else {
@@ -363,17 +345,17 @@ export function exportAction (context) {
 
   function builderData(layer, result) {
       var fullLayerName = layer.name(),
-          splitName = getAllTags(fullLayerName),
+          splitName = common.getAllTags(fullLayerName),
           layerName = splitName == null ? fullLayerName : splitName[0];
 
-      if (isSymbolInstance(layer)) {
+      if (common.isSymbolInstance(layer)) {
           layer.symbolMaster().layers().forEach(function(symbolLayer){
-              if (isSymbolInstance(symbolLayer)) {
-                  alert("ERROR!", 'Put embedded symbol "' + symbolLayer.name() + '" in a symbol-master group.');
+              if (common.isSymbolInstance(symbolLayer)) {
+                  common.alert("ERROR!", 'Put embedded symbol "' + symbolLayer.name() + '" in a symbol-master group.');
               }
               else {
                   var fullSymbolLayerName = symbolLayer.name();
-                  var symbolSplitName = getAllTags(fullSymbolLayerName);
+                  var symbolSplitName = common.getAllTags(fullSymbolLayerName);
                   var symbolLayerName = symbolSplitName == null ? fullSymbolLayerName : symbolSplitName[0];
                   var deepCollection = symbolLayer.layers();
 
@@ -383,14 +365,14 @@ export function exportAction (context) {
               }
           })
       }
-      else if (isGroup(layer)) {
+      else if (common.isGroup(layer)) {
           var deepCollection = layer.layers();
           // log(layerName);
           result[layerName] = {};
 
           buildData(deepCollection, result[layerName]);
       }
-      else if (isText(layer) || isLayer(layer)) {
+      else if (common.isText(layer) || common.isLayer(layer)) {
           result = Object.assign(result, layerAttrsBuilder(layer));
       }
   }
@@ -400,8 +382,8 @@ export function exportAction (context) {
     var selectedLayer = selection[i],
         collectionName = String(selectedLayer.name());
 
-    if (!isGroup(selectedLayer)) {
-      alert("ERROR!", "Please select a group.");
+    if (!common.isGroup(selectedLayer)) {
+      common.alert("ERROR!", "Please select a group.");
     } else {
       var collection = selectedLayer.layers(),
           result = {};

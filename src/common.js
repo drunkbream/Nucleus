@@ -1,74 +1,74 @@
-function isPage(layer) {
+export function isPage(layer) {
 	return layer.class() == MSPage;
 }
 
-function isArtboard(layer) {
+export function isArtboard(layer) {
 	return layer.class() == MSArtboardGroup;
 }
 
-function isSymbolMaster(layer) {
+export function isSymbolMaster(layer) {
 	return layer.class() == MSSymbolMaster;
 }
 
-function isSymbolInstance(layer) {
+export function isSymbolInstance(layer) {
 	return layer.class() == MSSymbolInstance;
 }
 
-function isSymbol(layer) {
+export function isSymbol(layer) {
 	return layer.class() == MSSymbolInstance || layer.class() == MSSymbolMaster;
 }
 
-function isGroup(layer) {
+export function isGroup(layer) {
 	return layer.class() == MSLayerGroup;
 }
 
-function isLayer(layer) {
+export function isLayer(layer) {
 	return !isGroup(layer) && !isText(layer);
 }
 
 // MSTextLayer
-function isText(layer) {
+export function isText(layer) {
 	return layer.class() == MSTextLayer;
 }
 
-function alert(title, message){
+export function alert(title, message){
 	var app = NSApplication. sharedApplication();
 	app.displayDialog_withTitle_(message, title);
 }
 
-function getFirstTag(str){
+export function getFirstTag(str){
 	return str.match(/[^#\ ^\.]+/g);
 }
 
-function getAllTags(str){
+export function getAllTags(str){
 	return str.match(/[^#\ ^\.]+/g);
 }
 
-function getAllTagsWithoutName(str){
+export function getAllTagsWithoutName(str){
 	 return str.match(/#([^#\ ^\.]+)/);
 }
 
-function getPropName(str){
+export function getPropName(str){
 	var split = str.match(/(.+)\:\s*(.+)/);
 	return split[1];
 }
 
-function getPropVal(str){
+export function getPropVal(str){
 	var split = str.match(/(.+)\:\s*(.+)/);
 	return split[2];
 }
 
-function tagAndNames(layer){
+export function tagAndNames(layer){
 			var fullLayerName = layer.name(),
 			splitName = getAllTags(fullLayerName),
-			layerName = splitName == null ? fullLayerName : splitName[0];
+			layerName = splitName == null ? fullLayerName : splitName[0],
 		 	inTag = getAllTagsWithoutName(fullLayerName) ?  true : false;
 
 			return {fullName: fullLayerName, tags: inTag, name: layerName}
 	}
 
 
-function rgbaCode(color) {
+export function rgbaCode(color) {
   var red = Math.round(color.red() * 255);
   var green = Math.round(color.green() * 255);
   var blue = Math.round(color.blue() * 255);
@@ -76,7 +76,7 @@ function rgbaCode(color) {
   return 'rgba(' + red + ',' + green + ',' + blue + ',' + color.alpha() + ')';
 }
 
-function getShadow(style) {
+export function getShadow(style) {
 	var shadows = style.enabledShadows();
 	var len = shadows.length;
 
@@ -87,7 +87,7 @@ function getShadow(style) {
 	}
 }
 
-function getInnerShadow(style) {
+export function getInnerShadow(style) {
 	var shadows = style.enabledInnerShadows();
 	var len = shadows.length;
 
