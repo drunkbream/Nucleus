@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/levtolstoi/Atomary.git"
+    "url": "https://github.com/levtolstoi/Nucleus.git"
   },
   "description": "Plugin for create Atomic Design concept in Sketch and export scss-map for front-end"
 }
