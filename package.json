@@ -1,13 +1,13 @@
 {
-  "name": "nucleus",
-  "version": "1.0.0",
+  "name": ".",
+  "version": "0.1.0",
   "engines": {
     "sketch": ">=3.0"
   },
   "skpm": {
-    "name": "Nucleus",
+    "name": ".",
     "manifest": "src/manifest.json",
-    "main": "Nucleus.sketchplugin",
+    "main": "plugin.sketchplugin",
     "assets": [
       "assets/**/*"
     ]
@@ -19,12 +19,7 @@
     "postinstall": "npm run build && skpm-link"
   },
   "devDependencies": {
-    "@skpm/builder": "^0.5.2",
-    "sketch-builder": "^0.2.0"
+    "@skpm/builder": "^0.5.2"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/levtolstoi/Nucleus.git"
-  },
-  "description": "Plugin for create Atomic Design concept in Sketch and export scss-map for front-end"
+  "author": "levtolstoi <light.n.night@gmail.com>"
 }

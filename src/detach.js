@@ -1,6 +1,6 @@
 import * as common from './common';
 
-var onRun = function(context) {
+export function detachAction(context) {
   var document = context.document;
   var selection = context.selection;
 

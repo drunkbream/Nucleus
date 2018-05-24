@@ -1,79 +1,109 @@
 import * as common from './common';
 
-var ways = [];
 
-var onRun = function(context) {
-var doc = context.document;
-var selection = context.selection;
-var allPages = doc.pages();
-var allLayers = [];
-var selectedLayer = selection.firstObject();
-var sharedStyles = context.document.documentData().layerStyles().sharedStyles();
+export function exportAction(context) {
+  var ways = [];
+  var doc = context.document;
+  var selection = context.selection;
+  var allPages = doc.pages();
+  var allLayers = [];
+  var selectedLayer = selection.firstObject();
+  var sharedStyles = context.document.documentData().layerStyles().sharedStyles();
 
-for (var i = 0; i < doc.pages().length; i++) {
-  var page = doc.pages().objectAtIndex(i);
-  var artboards = page.artboards();
-  getAllLayers(artboards);
-}
+  for (var i = 0; i < doc.pages().length; i++) {
+    var page = doc.pages().objectAtIndex(i);
+    var artboards = page.artboards();
+    getAllLayers(artboards);
+  }
 
-function getAllLayers(objects){
-  objects.forEach(function(obj){
-    var objectID = obj.objectID();
+  function exportJSON(a, file_path, filename){
+    var jsonName = '$' + String(filename);
+  	// Create the JSON object from the layer array
+    var jsonObj = {};
+    jsonObj[jsonName] = a;
 
-    if (isArtboard(obj)) {
-      var layers = obj.layers();
+    function format(obj){
+      var jsonAsStr = JSON.stringify(obj, null, 2);
+      jsonAsStr = jsonAsStr.substring(1, jsonAsStr.length - 1);
+      jsonAsStr = jsonAsStr.replace(/"/g, '')
+                          .replace(/[\[\{]/g, '(')
+                          .replace(/[\]\}]/g, ')')
+                          .replace(/\\/g, '\'');
 
-      getAllLayers(layers);
-      //need alert Please create the artboard
+      return jsonAsStr;
     }
-    else if (isSymbolMaster(obj)) {
-      var layers = obj.layers();
 
-      allLayers.push(obj);
-      getAllLayers(layers);
-    }
-    else if (isGroup(obj)) {
-      var layers = obj.layers();
+    var formattedString = format(ways).replace(/,/g, '') + format(jsonObj);
+                      //   log(jsonObj);
+    // jsonAsStr.replace(/\"/g, '');
+    // Convert the object to a json string
+    var file = NSString.stringWithString(formattedString + ';');
+    // var scss = file.replace(/\{/g, '(').replace(/\}/g, ')');
+    // Save the file
+    file.writeToFile_atomically_encoding_error_( file_path + filename + ".scss"  ,true  ,NSUTF8StringEncoding  ,null);
 
-      allLayers.push(obj);
-      getAllLayers(layers);
-    }
-    else {
-      allLayers.push(obj);
-    }
-  })
-}
+    var alertMessage = jsonName+".json saved to: " + file_path;
+    alert("SCSS MAP Exported!", alertMessage);
+  }
 
-//make sure something is selected
-if(selection.count() == 0){
-  	doc.showMessage("Please select a layer.");
-}
-else {
+  function getAllLayers(objects){
+    objects.forEach(function(obj){
+      var objectID = obj.objectID();
 
-  //allow xml to be written to the folder
-  var fileTypes = NSArray.arrayWithObjects("json", null);
+      if (isArtboard(obj)) {
+        var layers = obj.layers();
 
-  //create select folder window
-  var panel = NSOpenPanel.openPanel();
-  panel.setCanChooseDirectories(true);
-  panel.setCanCreateDirectories(true);
-  panel.setAllowedFileTypes(fileTypes);
+        getAllLayers(layers);
+        //need alert Please create the artboard
+      }
+      else if (isSymbolMaster(obj)) {
+        var layers = obj.layers();
 
-  var clicked = panel.runModal();
-  //check if Ok has been clicked
-	if (clicked == NSFileHandlingPanelOKButton) {
+        allLayers.push(obj);
+        getAllLayers(layers);
+      }
+      else if (isGroup(obj)) {
+        var layers = obj.layers();
 
-		var isDirectory = true;
-    //get the folder path
-		var firstURL = panel.URLs().objectAtIndex(0);
-    //format it to a string
-		var file_path = NSString.stringWithFormat_( NSString.stringWithString_( "%@"), firstURL);
+        allLayers.push(obj);
+        getAllLayers(layers);
+      }
+      else {
+        allLayers.push(obj);
+      }
+    })
+  }
 
-    //remove the file:// path from string
-    if (0 === file_path.indexOf("file://")) {
-      file_path = file_path.substring(7);
-    }
-	}
+  //make sure something is selected
+  if(selection.count() == 0){
+    	doc.showMessage("Please select a layer.");
+  }
+  else {
+
+    //allow xml to be written to the folder
+    var fileTypes = NSArray.arrayWithObjects("json", null);
+
+    //create select folder window
+    var panel = NSOpenPanel.openPanel();
+    panel.setCanChooseDirectories(true);
+    panel.setCanCreateDirectories(true);
+    panel.setAllowedFileTypes(fileTypes);
+
+    var clicked = panel.runModal();
+    //check if Ok has been clicked
+  	if (clicked == NSFileHandlingPanelOKButton) {
+
+  		var isDirectory = true;
+      //get the folder path
+  		var firstURL = panel.URLs().objectAtIndex(0);
+      //format it to a string
+  		var file_path = NSString.stringWithFormat_( NSString.stringWithString_( "%@"), firstURL);
+
+      //remove the file:// path from string
+      if (0 === file_path.indexOf("file://")) {
+        file_path = file_path.substring(7);
+      }
+  	}
   }
 
   //google fonts weigts
@@ -381,33 +411,3 @@ else {
     }
 	}
 };
-
-function exportJSON(a, file_path, filename){
-  var jsonName = '$' + String(filename);
-	// Create the JSON object from the layer array
-  var jsonObj = {};
-  jsonObj[jsonName] = a;
-
-  function format(obj){
-    var jsonAsStr = JSON.stringify(obj, null, 2);
-    jsonAsStr = jsonAsStr.substring(1, jsonAsStr.length - 1);
-    jsonAsStr = jsonAsStr.replace(/"/g, '')
-                        .replace(/[\[\{]/g, '(')
-                        .replace(/[\]\}]/g, ')')
-                        .replace(/\\/g, '\'');
-
-    return jsonAsStr;
-  }
-
-  var formattedString = format(ways).replace(/,/g, '') + format(jsonObj);
-                    //   log(jsonObj);
-  // jsonAsStr.replace(/\"/g, '');
-  // Convert the object to a json string
-  var file = NSString.stringWithString(formattedString + ';');
-  // var scss = file.replace(/\{/g, '(').replace(/\}/g, ')');
-  // Save the file
-  file.writeToFile_atomically_encoding_error_( file_path + filename + ".scss"  ,true  ,NSUTF8StringEncoding  ,null);
-
-  var alertMessage = jsonName+".json saved to: " + file_path;
-  alert("SCSS MAP Exported!", alertMessage);
-}

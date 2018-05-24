@@ -42,7 +42,8 @@
       "Export",
       "Detach",
       "Rename"
-    ]
+    ],
+    "title": "."
   },
   "disableCocoaScriptPreprocessor": true,
   "appcast": "https://raw.githubusercontent.com/levtolstoi/Nucleus/master/.appcast.xml"

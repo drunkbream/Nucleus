@@ -1,6 +1,6 @@
 import * as common from './common';
 
-var onRun = function(context) {
+export function renameAction(context) {
   var selection = context.selection;
   var layers = [];
 

@@ -1,6 +1,6 @@
 import * as common from './common';
 
-var onRun = function(context) {
+export function syncAction(context) {
     var doc = context.document,
         selection = context.selection,
         nucleonsLayers = [],
