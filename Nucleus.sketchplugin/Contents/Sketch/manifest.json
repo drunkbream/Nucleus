@@ -45,5 +45,5 @@
     ]
   },
   "disableCocoaScriptPreprocessor": true,
-  "appcast": "https://raw.githubusercontent.com/levtolstoi/Atomary/master/.appcast.xml"
+  "appcast": "https://raw.githubusercontent.com/levtolstoi/Nucleus/master/.appcast.xml"
 }
