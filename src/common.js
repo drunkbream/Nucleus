@@ -14,6 +14,10 @@ export function isSymbolInstance(layer) {
 	return layer.class() == MSSymbolInstance;
 }
 
+export function isShape(layer) {
+	return layer.class() == MSShapeGroup;
+}
+
 export function isSymbol(layer) {
 	return layer.class() == MSSymbolInstance || layer.class() == MSSymbolMaster;
 }
@@ -23,7 +27,7 @@ export function isGroup(layer) {
 }
 
 export function isLayer(layer) {
-	return !isGroup(layer) && !isText(layer);
+	return !isGroup(layer) && !isText(layer) && !isSymbolInstance(layer);
 }
 
 // MSTextLayer
@@ -59,13 +63,13 @@ export function getPropVal(str){
 }
 
 export function tagAndNames(layer){
-			var fullLayerName = layer.name(),
-			splitName = getAllTags(fullLayerName),
-			layerName = splitName == null ? fullLayerName : splitName[0],
-		 	inTag = getAllTagsWithoutName(fullLayerName) ?  true : false;
+		var fullLayerName = layer.name(),
+		splitName = getAllTags(fullLayerName),
+		layerName = splitName == null ? fullLayerName : splitName[0],
+	 	inTag = getAllTagsWithoutName(fullLayerName) ?  true : false;
 
-			return {fullName: fullLayerName, tags: inTag, name: layerName}
-	}
+		return {fullName: fullLayerName, tags: inTag, name: layerName}
+}
 
 
 export function rgbaCode(color) {

@@ -80,7 +80,7 @@ var exports =
 /*!***********************!*\
   !*** ./src/common.js ***!
   \***********************/
-/*! exports provided: isPage, isArtboard, isSymbolMaster, isSymbolInstance, isSymbol, isGroup, isLayer, isText, alert, getFirstTag, getAllTags, getAllTagsWithoutName, getPropName, getPropVal, tagAndNames, rgbaCode, getShadow, getInnerShadow */
+/*! exports provided: isPage, isArtboard, isSymbolMaster, isSymbolInstance, isShape, isSymbol, isGroup, isLayer, isText, alert, getFirstTag, getAllTags, getAllTagsWithoutName, getPropName, getPropVal, tagAndNames, rgbaCode, getShadow, getInnerShadow */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -89,6 +89,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isArtboard", function() { return isArtboard; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSymbolMaster", function() { return isSymbolMaster; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSymbolInstance", function() { return isSymbolInstance; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isShape", function() { return isShape; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSymbol", function() { return isSymbol; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isGroup", function() { return isGroup; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isLayer", function() { return isLayer; });
@@ -115,6 +116,9 @@ function isSymbolMaster(layer) {
 function isSymbolInstance(layer) {
   return layer.class() == MSSymbolInstance;
 }
+function isShape(layer) {
+  return layer.class() == MSShapeGroup;
+}
 function isSymbol(layer) {
   return layer.class() == MSSymbolInstance || layer.class() == MSSymbolMaster;
 }
@@ -122,7 +126,7 @@ function isGroup(layer) {
   return layer.class() == MSLayerGroup;
 }
 function isLayer(layer) {
-  return !isGroup(layer) && !isText(layer);
+  return !isGroup(layer) && !isText(layer) && !isSymbolInstance(layer);
 } // MSTextLayer
 
 function isText(layer) {
@@ -214,8 +218,10 @@ function syncAction(context) {
 
     if (names.name == 'nucleon') {
       nucleonsLayers.push(layer);
+      return true;
     } else if (names.tags) {
       syncLayers.push(layer);
+      return false;
     }
   }
 
@@ -223,7 +229,7 @@ function syncAction(context) {
     var result = [];
     objects.forEach(function (obj) {
       if (_common__WEBPACK_IMPORTED_MODULE_0__["isSymbolMaster"](obj) || _common__WEBPACK_IMPORTED_MODULE_0__["isGroup"](obj)) {
-        getInnerLayers(obj.layers());
+        separator(obj) ? separator(obj) : getInnerLayers(obj.layers());
       } else {
         separator(obj);
       }
@@ -248,7 +254,7 @@ function syncAction(context) {
 
   getSyncLayers(doc.pages());
 
-  function getShadownucleonsValues(nucleon) {
+  function getShadowNucleonsValues(nucleon) {
     var nucleonShadow = nucleon.style().enabledShadows(),
         nucleonInnerShadow = nucleon.style().enabledInnerShadows(),
         shadowValues = {};
@@ -288,7 +294,7 @@ function syncAction(context) {
     };
   }
 
-  function getRadiusnucleonsValues(nucleon) {
+  function getRadiusNucleonsValues(nucleon) {
     var points = [];
     var radius = {};
     nucleon.children().forEach(function (e) {
@@ -314,17 +320,32 @@ function syncAction(context) {
     });
   }
 
+  function setIcon(layer, value) {
+    var layerParent = layer.parentGroup();
+    var xPos = layer.frame().x();
+    var yPos = layer.frame().y();
+    var dup = value.duplicate();
+    layer.removeFromParent();
+    dup.removeFromParent();
+    dup.name = layer.name();
+    dup.frame().x = xPos;
+    dup.frame().y = yPos;
+    layerParent.addLayers([dup]);
+  }
+
   function nucleonProps(nucleon) {
     var tagName = _common__WEBPACK_IMPORTED_MODULE_0__["getAllTags"](nucleon.name());
     var key = tagName[1].charAt(0);
     return {
       h: key == 'h' ? nucleon.frame().height() : null,
       w: key == 'w' ? nucleon.frame().width() : null,
+      o: key == 'o' ? nucleon.frame().width() : null,
       b: key == 'b' ? nucleon.style().firstEnabledFill().color() : null,
       c: key == 'c' ? nucleon.textColor() : null,
       t: key == 't' ? getTextProps(nucleon) : null,
-      s: key == 's' ? getShadownucleonsValues(nucleon) : null,
-      r: key == 'r' ? getRadiusnucleonsValues(nucleon) : null
+      s: key == 's' ? getShadowNucleonsValues(nucleon) : null,
+      r: key == 'r' ? getRadiusNucleonsValues(nucleon) : null,
+      i: key == 'i' ? nucleon : null
     };
   }
 
@@ -388,7 +409,8 @@ function syncAction(context) {
         setSyncProps(layer, tagName, key);
       });
     });
-  }
+  } // && !isShape(layer)
+
 
   function setSyncProps(layer, tagName, key) {
     var value = new Object(nucleonValues[tagName]);
@@ -399,6 +421,7 @@ function syncAction(context) {
     key == 't' ? setTextProps(layer, value[key]) : null;
     key == 's' ? setShadows(layer, value[key]) : null;
     key == 'r' ? setRadius(layer, value[key]) : null;
+    key == 'i' ? setIcon(layer, value[key]) : null;
   }
 
   sync(syncLayers);

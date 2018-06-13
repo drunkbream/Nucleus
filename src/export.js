@@ -1,19 +1,54 @@
 import * as common from './common';
 
-
 export function exportAction (context) {
   var ways = [];
   var doc = context.document;
   var selection = context.selection;
-  var allPages = doc.pages();
-  var allLayers = [];
   var selectedLayer = selection.firstObject();
-  var sharedStyles = context.document.documentData().layerStyles().sharedStyles();
-
+  // var allLayers = getLayersForExport(doc.pages(), selectedLayer);
+  var allLayers = [];
+  // var sharedStyles = context.document.documentData().layerStyles().sharedStyles();
+  //
   for (var i = 0; i < doc.pages().length; i++) {
     var page = doc.pages().objectAtIndex(i);
     var artboards = page.artboards();
     getAllLayers(artboards);
+  }
+
+  function isIcon(layer){
+    var tagsNames = layer.name().split("#").slice(1);
+    var key = '';
+
+    tagsNames.forEach((tag) => {
+      var tagName = String(tag);
+      tagName.charAt(0) == 'i' ? key = true : false;
+    })
+
+    return key;
+  }
+
+  function getAllLayers(objects){
+    objects.forEach(function(obj){
+      if (common.isArtboard(obj)) {
+        var layers = obj.layers();
+
+        getAllLayers(layers);
+        //need alert Please create the artboard
+      }
+      else if (common.isSymbolMaster(obj)) {
+        var layers = obj.layers();
+
+        allLayers.push(obj);
+        getAllLayers(layers);
+      }
+      else if (common.isGroup(obj)) {
+        var layers = obj.layers();
+        isIcon(obj) ? allLayers.push(obj) : getAllLayers(layers);
+      }
+      else {
+        allLayers.push(obj);
+      }
+    })
   }
 
   function exportJSON(a, file_path, filename){
@@ -34,45 +69,13 @@ export function exportAction (context) {
     }
 
     var formattedString = format(ways).replace(/,/g, '') + format(jsonObj);
-                      //   log(jsonObj);
-    // jsonAsStr.replace(/\"/g, '');
-    // Convert the object to a json string
     var file = NSString.stringWithString(formattedString + ';');
-    // var scss = file.replace(/\{/g, '(').replace(/\}/g, ')');
     // Save the file
     file.writeToFile_atomically_encoding_error_( file_path + filename + ".scss"  ,true  ,NSUTF8StringEncoding  ,null);
 
-    var alertMessage = jsonName+".json saved to: " + file_path;
+    var alertMessage = jsonName + " saved to: " + file_path;
     common.alert("SCSS MAP Exported!", alertMessage);
   };
-
-  function getAllLayers(objects){
-    objects.forEach(function(obj){
-      var objectID = obj.objectID();
-
-      if (common.isArtboard(obj)) {
-        var layers = obj.layers();
-
-        getAllLayers(layers);
-        //need alert Please create the artboard
-      }
-      else if (common.isSymbolMaster(obj)) {
-        var layers = obj.layers();
-
-        allLayers.push(obj);
-        getAllLayers(layers);
-      }
-      else if (common.isGroup(obj)) {
-        var layers = obj.layers();
-
-        allLayers.push(obj);
-        getAllLayers(layers);
-      }
-      else {
-        allLayers.push(obj);
-      }
-    })
-  }
 
   //make sure something is selected
   if(selection.count() == 0){
@@ -138,18 +141,27 @@ export function exportAction (context) {
      's': 'box-shadow',
    };
 
-   function getnucleonPropVal(layer, nucleonPropName) {
+   function getNucleonPropVal(layer, nucleonPropName, key) {
       var nucleonPropValues = {};
 
       if (common.isText(layer)) {
-        nucleonPropValues = { 'color': common.rgbaCode(layer.textColor()) }
-      } else {
+        nucleonPropValues = {
+          'color': common.rgbaCode(layer.textColor()),
+          'text-transform': layer.styleAttributes().MSAttributedStringTextTransformAttribute == 1 ? 'uppercase' : 'lowercase',
+        }
+      } else if (key != 'i') {
         nucleonPropValues = {
            'height': layer.frame().height() + 'px',
            'width': layer.frame().width() + 'px',
            'background': common.rgbaCode(layer.style().firstEnabledFill().color()),
            'border-radius': getRadius(layer),
            'box-shadow': getShadows(layer),
+        }
+      } else {
+        nucleonPropValues = {
+          'height': layer.frame().height() + 'px',
+          'width': layer.frame().width() + 'px',
+          'background-image': getBase64(layer),
         }
       }
 
@@ -175,7 +187,7 @@ export function exportAction (context) {
     }
   };
 
-  function getVariable(tag, attrs) {
+  function getVariable(tag, attrs){
      for (var i = 0; i < allLayers.length; i++) {
         var layer = allLayers[i],
             fullLayerName = String(layer.name()),
@@ -201,11 +213,15 @@ export function exportAction (context) {
           if (tag == tagName && key == 't' || tag == tagName && key == 'c') {
               var res;
 
-              attrs.forEach(function(attr){
+              attrs.forEach((attr) => {
                   var attrName = common.getPropName(attr);
 
                   if (key == 't') {
-                      nucleonVars.push(attrName + ': mdg($' + parentGroupName + ', ' + tagName.replace(/\#/g, '') + ', ' +  attrName + ')');
+                      if (attrName == 'extend') {
+                        nucleonVars.push(attrName + ': ' + "'" + tagName + "'");
+                      } else {
+                        nucleonVars.push(attrName + ': mdg($' + parentGroupName + ', ' + tagName.replace(/\#/g, '') + ', ' +  attrName + ')');
+                      }
                       res = nucleonVars;
                   } else if (attrName == 'color' && key == 'c') {
                       res = attrName + ': mdg($' + parentGroupName + ', ' + tagName.replace(/\#/g, '') + ')';
@@ -214,6 +230,20 @@ export function exportAction (context) {
 
               return res;
 
+          } else if (tag == tagName && key == 'i') {
+            var res;
+
+            attrs.forEach((attr) => {
+              var attrName = attr.match(/^([^:]+):/);
+
+              if (attrName[1] == 'extend') {
+                nucleonVars.push(attrName[1] + ': ' + "'" + tagName + "'");
+              } else {
+                nucleonVars.push(attrName[1] + ': mdg($' + parentGroupName + ', ' + tagName.replace(/\#/g, '') + ', ' +  attrName[1] + ')');
+              }
+            })
+
+            return nucleonVars;
           }
           else if (tag == tagName) {
               return nucleonVar;
@@ -222,6 +252,31 @@ export function exportAction (context) {
       }
     }
   };
+
+  // function clearSVG(svg){
+  //   var substr = [
+  //     svg.match(/(.+)\<!\s*(.+)/),
+  //     svg.match(/(.+)\<title\s*(.+)/),
+  //     svg.match(/(.+)\<desc\s*(.+)/),
+  //     svg.match(/(.+)\<defs\s*(.+)/)
+  //   ];
+  //
+  //   substr.forEach((sub) => {
+  //     svg.replace(sub, '');
+  //   })
+  // }
+
+  function getBase64(layer){
+    var ancestry = MSImmutableLayerAncestry.ancestryWithMSLayer_(layer);
+    var exportRequest = MSExportRequest.exportRequestsFromLayerAncestry_(ancestry).firstObject();
+    exportRequest.format = 'svg';
+    var exporter = MSExporter.exporterForRequest_colorSpace_(exportRequest, NSColorSpace.sRGBColorSpace());
+    var data = exporter.data();
+    var base64Code = data.base64EncodedStringWithOptions(NSDataBase64EncodingEndLineWithLineFeed);
+    var base64 = NSString.alloc().initWithData_encoding(data, NSUTF8StringEncoding);
+
+    return "url('data:image/svg+xml;base64," + base64Code + "')";
+  }
 
   function getShadows(layer){
     var shadows = layer.style().enabledShadows();
@@ -265,6 +320,19 @@ export function exportAction (context) {
     return  radiusTopLeft + 'px ' + radiusTopRight + 'px ' + radiusBottomRight + 'px ' + radiusBottomLeft + 'px';
   }
 
+  function getAttrs(layer){
+    var attrs = [];
+    var rawAttrs = layer.CSSAttributes();
+
+    rawAttrs.forEach(function(attr) {
+        if (!attr.match(/[\/*^\.]/g)) {
+          attrs.push(attr.replace(/;/g, ''));
+        }
+    });
+
+    return attrs;
+  };
+
   function layerAttrsBuilder(layer) {
     var fullLayerName = layer.name(),
         splitName = common.getAllTags(fullLayerName),
@@ -272,14 +340,9 @@ export function exportAction (context) {
         tagsNames = fullLayerName.split("#").slice(1),
         nucleonAttrsObj = {},
         attrsObj = {},
-        rawAttrs = layer.CSSAttributes().slice(1, -1),
-        attrs = [];
+        attrs = getAttrs(layer);
 
-        rawAttrs.forEach(function(attr){
-            attrs.push(attr.replace(/;/g, ''));
-        })
-
-    if (!common.isText(layer) && !common.isSymbolInstance(layer)) {
+    if (common.isLayer(layer)) {
         var boxShadow = getShadows(layer) ? 'box-shadow: ' + getShadows(layer) : 'box-shadow: none';
         var radius = 'border-radius: ' + getRadius(layer);
 
@@ -289,8 +352,17 @@ export function exportAction (context) {
           radius,
           boxShadow,
         );
-    } else if (common.isText(layer)) {
+    } else if (isIcon(layer)) {
+      attrs.splice(attrs.length, 0,
+        'extend: ' + 'name',
+        'height: ' + layer.frame().height() + 'px',
+        'width: ' + layer.frame().width() + 'px',
+        'background-image: ' + getBase64(layer),
+      );
+    }
+    else if (common.isText(layer)) {
       var attrFontWeight;
+      var textTransform = layer.styleAttributes().MSAttributedStringTextTransformAttribute == 1 ? 'uppercase' : 'lowercase';
 
       attrs.forEach(function(attr) {
         if (common.getPropName(attr) == 'font-family') {
@@ -299,7 +371,9 @@ export function exportAction (context) {
       })
 
       attrs.splice(attrs.length, 0,
+        'extend: ' + 'name',
         'line-height: ' + layer.lineHeight() + 'px',
+        'text-transform: ' + textTransform,
         attrFontWeight,
       );
     }
@@ -311,12 +385,12 @@ export function exportAction (context) {
             var nucleonPropName = nucleonPropNames[key];
 
             attrs.forEach(function(attr, index){
-                    if (common.isText(layer) && key == 't') {
-                      layerName == 'nucleon' ? nucleonAttrsObj[tagName] = attrs : attrs = getVariable(tag, attrs);
-                    }
-                    else if (common.getPropName(attr) == nucleonPropName){
-                      layerName == 'nucleon' ? nucleonAttrsObj[tagName] = getnucleonPropVal(layer, nucleonPropName) : attrs[index] = getVariable(tag, attrs);
-                    }
+                if ((common.isText(layer) && key == 't') || key == 'i') {
+                  layerName == 'nucleon' ? nucleonAttrsObj[tagName] = attrs : attrs = getVariable(tag, attrs);
+                }
+                else if (common.getPropName(attr) == nucleonPropName){
+                  layerName == 'nucleon' ? nucleonAttrsObj[tagName] = getNucleonPropVal(layer, nucleonPropName, key) : attrs[index] = getVariable(tag, attrs);
+                }
             })
 
             if (layerName != 'nucleon') {
@@ -365,19 +439,18 @@ export function exportAction (context) {
               }
           })
       }
-      else if (common.isGroup(layer)) {
+      else if (common.isGroup(layer) && !isIcon(layer)) {
           var deepCollection = layer.layers();
-          // log(layerName);
           result[layerName] = {};
 
           buildData(deepCollection, result[layerName]);
       }
-      else if (common.isText(layer) || common.isLayer(layer)) {
+      else if (common.isText(layer) || common.isLayer(layer) || isIcon(layer)) {
           result = Object.assign(result, layerAttrsBuilder(layer));
       }
   }
 
-	//loop through the selected layers and export the XML
+	// loop through the selected layers and export the XML
 	for(var i = 0; i < selection.count(); i++){
     var selectedLayer = selection[i],
         collectionName = String(selectedLayer.name());

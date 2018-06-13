@@ -80,7 +80,7 @@ var exports =
 /*!***********************!*\
   !*** ./src/common.js ***!
   \***********************/
-/*! exports provided: isPage, isArtboard, isSymbolMaster, isSymbolInstance, isSymbol, isGroup, isLayer, isText, alert, getFirstTag, getAllTags, getAllTagsWithoutName, getPropName, getPropVal, tagAndNames, rgbaCode, getShadow, getInnerShadow */
+/*! exports provided: isPage, isArtboard, isSymbolMaster, isSymbolInstance, isShape, isSymbol, isGroup, isLayer, isText, alert, getFirstTag, getAllTags, getAllTagsWithoutName, getPropName, getPropVal, tagAndNames, rgbaCode, getShadow, getInnerShadow */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -89,6 +89,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isArtboard", function() { return isArtboard; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSymbolMaster", function() { return isSymbolMaster; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSymbolInstance", function() { return isSymbolInstance; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isShape", function() { return isShape; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isSymbol", function() { return isSymbol; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isGroup", function() { return isGroup; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isLayer", function() { return isLayer; });
@@ -115,6 +116,9 @@ function isSymbolMaster(layer) {
 function isSymbolInstance(layer) {
   return layer.class() == MSSymbolInstance;
 }
+function isShape(layer) {
+  return layer.class() == MSShapeGroup;
+}
 function isSymbol(layer) {
   return layer.class() == MSSymbolInstance || layer.class() == MSSymbolMaster;
 }
@@ -122,7 +126,7 @@ function isGroup(layer) {
   return layer.class() == MSLayerGroup;
 }
 function isLayer(layer) {
-  return !isGroup(layer) && !isText(layer);
+  return !isGroup(layer) && !isText(layer) && !isSymbolInstance(layer);
 } // MSTextLayer
 
 function isText(layer) {

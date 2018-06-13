@@ -12,8 +12,10 @@ export function syncAction (context) {
             var names = common.tagAndNames(layer);
             if (names.name == 'nucleon') {
                 nucleonsLayers.push(layer);
+                return true;
             } else if (names.tags) {
                 syncLayers.push(layer);
+                return false;
             }
         }
 
@@ -21,9 +23,9 @@ export function syncAction (context) {
             var result = [];
             objects.forEach(function(obj) {
                 if (common.isSymbolMaster(obj) || common.isGroup(obj)) {
-                    getInnerLayers(obj.layers())
+                  separator(obj) ? separator(obj) : getInnerLayers(obj.layers());
                 } else {
-                    separator(obj);
+                  separator(obj);
                 }
             })
         }
@@ -46,7 +48,7 @@ export function syncAction (context) {
 
         getSyncLayers(doc.pages());
 
-    function getShadownucleonsValues(nucleon){
+    function getShadowNucleonsValues(nucleon){
         var nucleonShadow = nucleon.style().enabledShadows(),
             nucleonInnerShadow = nucleon.style().enabledInnerShadows(),
             shadowValues = {};
@@ -86,7 +88,7 @@ export function syncAction (context) {
         }
     }
 
-    function getRadiusnucleonsValues(nucleon){
+    function getRadiusNucleonsValues(nucleon){
         var points = [];
         var radius = {};
 
@@ -115,6 +117,20 @@ export function syncAction (context) {
       });
     }
 
+    function setIcon(layer, value){
+      var layerParent = layer.parentGroup();
+      var xPos = layer.frame().x();
+      var yPos = layer.frame().y();
+      var dup = value.duplicate();
+
+      layer.removeFromParent();
+      dup.removeFromParent();
+      dup.name = layer.name();
+      dup.frame().x = xPos;
+      dup.frame().y = yPos;
+      layerParent.addLayers([dup]);
+    }
+
     function nucleonProps(nucleon) {
         var tagName = common.getAllTags(nucleon.name());
         var key = tagName[1].charAt(0);
@@ -122,11 +138,13 @@ export function syncAction (context) {
         return {
             h: key == 'h' ? nucleon.frame().height() : null,
             w: key == 'w' ? nucleon.frame().width() : null,
+            o: key == 'o' ? nucleon.frame().width() : null,
             b: key == 'b' ? nucleon.style().firstEnabledFill().color() : null,
             c: key == 'c' ? nucleon.textColor() : null,
             t: key == 't' ? getTextProps(nucleon) : null,
-            s: key == 's' ? getShadownucleonsValues(nucleon) : null,
-            r: key == 'r' ? getRadiusnucleonsValues(nucleon) : null
+            s: key == 's' ? getShadowNucleonsValues(nucleon) : null,
+            r: key == 'r' ? getRadiusNucleonsValues(nucleon) : null,
+            i: key == 'i' ? nucleon : null,
         };
     }
 
@@ -193,7 +211,7 @@ export function syncAction (context) {
             })
         })
     }
-
+// && !isShape(layer)
     function setSyncProps(layer, tagName, key){
         var value = new Object(nucleonValues[tagName]);
 
@@ -204,6 +222,7 @@ export function syncAction (context) {
         key == 't' ? setTextProps(layer, value[key]) : null;
         key == 's' ? setShadows(layer, value[key]) : null;
         key == 'r' ? setRadius(layer, value[key]) : null;
+        key == 'i' ? setIcon(layer, value[key]) : null;
     }
 
     sync(syncLayers);
