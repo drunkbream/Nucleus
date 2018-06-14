@@ -344,13 +344,13 @@ export function exportAction (context) {
 
     if (common.isLayer(layer)) {
         var boxShadow = getShadows(layer) ? 'box-shadow: ' + getShadows(layer) : 'box-shadow: none';
-        var radius = 'border-radius: ' + getRadius(layer);
+        // var radius = 'border-radius: ' + getRadius(layer);
 
         attrs.splice(attrs.length, 0,
           'height: ' + layer.frame().height() + 'px',
           'width: ' + layer.frame().width() + 'px',
-          radius,
           boxShadow,
+          // radius,
         );
     } else if (isIcon(layer)) {
       attrs.splice(attrs.length, 0,
@@ -372,7 +372,7 @@ export function exportAction (context) {
 
       attrs.splice(attrs.length, 0,
         'extend: ' + 'name',
-        'line-height: ' + layer.lineHeight() + 'px',
+        // 'line-height: ' + layer.lineHeight() + 'px',// in base sketch functional
         'text-transform: ' + textTransform,
         attrFontWeight,
       );

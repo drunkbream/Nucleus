@@ -518,9 +518,10 @@ function exportAction(context) {
         attrs = getAttrs(layer);
 
     if (_common__WEBPACK_IMPORTED_MODULE_0__["isLayer"](layer)) {
-      var boxShadow = getShadows(layer) ? 'box-shadow: ' + getShadows(layer) : 'box-shadow: none';
-      var radius = 'border-radius: ' + getRadius(layer);
-      attrs.splice(attrs.length, 0, 'height: ' + layer.frame().height() + 'px', 'width: ' + layer.frame().width() + 'px', radius, boxShadow);
+      var boxShadow = getShadows(layer) ? 'box-shadow: ' + getShadows(layer) : 'box-shadow: none'; // var radius = 'border-radius: ' + getRadius(layer);
+
+      attrs.splice(attrs.length, 0, 'height: ' + layer.frame().height() + 'px', 'width: ' + layer.frame().width() + 'px', boxShadow // radius,
+      );
     } else if (isIcon(layer)) {
       attrs.splice(attrs.length, 0, 'extend: ' + 'name', 'height: ' + layer.frame().height() + 'px', 'width: ' + layer.frame().width() + 'px', 'background-image: ' + getBase64(layer));
     } else if (_common__WEBPACK_IMPORTED_MODULE_0__["isText"](layer)) {
@@ -531,7 +532,8 @@ function exportAction(context) {
           attrFontWeight = fontWeight(attr);
         }
       });
-      attrs.splice(attrs.length, 0, 'extend: ' + 'name', 'line-height: ' + layer.lineHeight() + 'px', 'text-transform: ' + textTransform, attrFontWeight);
+      attrs.splice(attrs.length, 0, 'extend: ' + 'name', // 'line-height: ' + layer.lineHeight() + 'px',// in base sketch functional
+      'text-transform: ' + textTransform, attrFontWeight);
     }
 
     if (splitName[1] && tagsNames) {
