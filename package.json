@@ -21,7 +21,7 @@
   "devDependencies": {
     "@skpm/builder": "^0.5.2"
   },
-  "author": "levtolstoi <light.n.night@gmail.com>",
+  "author": "Ivan Belkov <light.n.night@gmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/levtolstoi/Nucleus.git"
