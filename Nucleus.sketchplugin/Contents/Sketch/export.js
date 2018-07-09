@@ -333,7 +333,7 @@ function exportAction(context) {
     if (_common__WEBPACK_IMPORTED_MODULE_0__["isText"](layer)) {
       nucleonPropValues = {
         'color': _common__WEBPACK_IMPORTED_MODULE_0__["rgbaCode"](layer.textColor()),
-        'text-transform': layer.styleAttributes().MSAttributedStringTextTransformAttribute == 1 ? 'uppercase' : 'lowercase'
+        'text-transform': layer.styleAttributes().MSAttributedStringTextTransformAttribute == 1 ? 'uppercase' : 'none'
       };
     } else if (key != 'i') {
       nucleonPropValues = {
@@ -449,6 +449,26 @@ function exportAction(context) {
   //   })
   // }
 
+  function dediplicate(a) {
+    var result = [];
+    a.forEach(function (item) {
+      if (result.indexOf(item) < 0) {
+        result.push(item);
+      }
+    });
+    return result;
+  }
+
+  function attrDelete(attrs, args) {
+    for (var i = 0; i < attrs.length; i++) {
+      args.forEach(function (a) {
+        if (typeof attrs[i] == 'string' && _common__WEBPACK_IMPORTED_MODULE_0__["getPropName"](attrs[i]) == a && _common__WEBPACK_IMPORTED_MODULE_0__["getPropName"](attrs[i]) != 'background') {
+          attrs.splice(i, 1);
+        }
+      });
+    }
+  }
+
   function getBase64(layer) {
     var ancestry = MSImmutableLayerAncestry.ancestryWithMSLayer_(layer);
     var exportRequest = MSExportRequest.exportRequestsFromLayerAncestry_(ancestry).firstObject();
@@ -516,48 +536,50 @@ function exportAction(context) {
         nucleonAttrsObj = {},
         attrsObj = {},
         attrs = getAttrs(layer);
+    attrDelete(attrs, Object.values(nucleonPropNames));
 
-    if (_common__WEBPACK_IMPORTED_MODULE_0__["isLayer"](layer)) {
-      var boxShadow = getShadows(layer) ? 'box-shadow: ' + getShadows(layer) : 'box-shadow: none'; // var radius = 'border-radius: ' + getRadius(layer);
-
-      attrs.splice(attrs.length, 0, 'height: ' + layer.frame().height() + 'px', 'width: ' + layer.frame().width() + 'px', boxShadow // radius,
-      );
+    if (_common__WEBPACK_IMPORTED_MODULE_0__["isLayer"](layer) && !isIcon(layer)) {
+      var boxShadow = getShadows(layer) ? 'box-shadow: ' + getShadows(layer) : 'box-shadow: none';
+      var radius = 'border-radius: ' + getRadius(layer);
+      attrs.splice(attrs.length, 0, 'height: ' + layer.frame().height() + 'px', 'width: ' + layer.frame().width() + 'px', boxShadow, radius);
     } else if (isIcon(layer)) {
       attrs.splice(attrs.length, 0, 'extend: ' + 'name', 'height: ' + layer.frame().height() + 'px', 'width: ' + layer.frame().width() + 'px', 'background-image: ' + getBase64(layer));
     } else if (_common__WEBPACK_IMPORTED_MODULE_0__["isText"](layer)) {
       var attrFontWeight;
-      var textTransform = layer.styleAttributes().MSAttributedStringTextTransformAttribute == 1 ? 'uppercase' : 'lowercase';
+      var textTransform = layer.styleAttributes().MSAttributedStringTextTransformAttribute == 1 ? 'uppercase' : 'none';
       attrs.forEach(function (attr) {
         if (_common__WEBPACK_IMPORTED_MODULE_0__["getPropName"](attr) == 'font-family') {
           attrFontWeight = fontWeight(attr);
         }
       });
       attrs.splice(attrs.length, 0, 'extend: ' + 'name', // 'line-height: ' + layer.lineHeight() + 'px',// in base sketch functional
-      'text-transform: ' + textTransform, attrFontWeight);
+      'text-transform: ' + textTransform, 'color: ' + _common__WEBPACK_IMPORTED_MODULE_0__["rgbaCode"](layer.textColor()), attrFontWeight);
     }
+
+    var cleanAttrs = dediplicate(attrs);
 
     if (splitName[1] && tagsNames) {
       tagsNames.forEach(function (tag) {
         var tagName = String(tag);
         var key = tagName.charAt(0);
         var nucleonPropName = nucleonPropNames[key];
-        attrs.forEach(function (attr, index) {
+        cleanAttrs.forEach(function (attr, index) {
           if (_common__WEBPACK_IMPORTED_MODULE_0__["isText"](layer) && key == 't' || key == 'i') {
-            layerName == 'nucleon' ? nucleonAttrsObj[tagName] = attrs : attrs = getVariable(tag, attrs);
+            layerName == 'nucleon' ? nucleonAttrsObj[tagName] = cleanAttrs : cleanAttrs = getVariable(tag, cleanAttrs);
           } else if (_common__WEBPACK_IMPORTED_MODULE_0__["getPropName"](attr) == nucleonPropName) {
-            layerName == 'nucleon' ? nucleonAttrsObj[tagName] = getNucleonPropVal(layer, nucleonPropName, key) : attrs[index] = getVariable(tag, attrs);
+            layerName == 'nucleon' ? nucleonAttrsObj[tagName] = getNucleonPropVal(layer, nucleonPropName, key) : cleanAttrs[index] = getVariable(tag, cleanAttrs);
           }
         });
 
         if (layerName != 'nucleon') {
-          nucleonAttrsObj[layerName] = attrs;
+          nucleonAttrsObj[layerName] = cleanAttrs;
         }
       });
     } else {
-      nucleonAttrsObj[layerName] = attrs;
+      nucleonAttrsObj[layerName] = cleanAttrs;
     }
 
-    attrsObj[layerName] = attrs;
+    attrsObj[layerName] = cleanAttrs;
 
     if (_common__WEBPACK_IMPORTED_MODULE_0__["isText"](layer) || layerName == 'nucleon') {
       return nucleonAttrsObj;

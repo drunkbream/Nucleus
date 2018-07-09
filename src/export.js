@@ -147,7 +147,7 @@ export function exportAction (context) {
       if (common.isText(layer)) {
         nucleonPropValues = {
           'color': common.rgbaCode(layer.textColor()),
-          'text-transform': layer.styleAttributes().MSAttributedStringTextTransformAttribute == 1 ? 'uppercase' : 'lowercase',
+          'text-transform': layer.styleAttributes().MSAttributedStringTextTransformAttribute == 1 ? 'uppercase' : 'none',
         }
       } else if (key != 'i') {
         nucleonPropValues = {
@@ -266,6 +266,27 @@ export function exportAction (context) {
   //   })
   // }
 
+  function dediplicate(a){
+    var result = [];
+    a.forEach(function(item) {
+       if(result.indexOf(item) < 0) {
+           result.push(item);
+       }
+    });
+
+    return result;
+  }
+
+  function attrDelete(attrs, args) {
+    for(var i = 0; i < attrs.length; i++){
+      args.forEach((a) => {
+        if (typeof attrs[i] == 'string' && common.getPropName(attrs[i]) == a && common.getPropName(attrs[i]) != 'background') {
+          attrs.splice(i, 1);
+        }
+      })
+    }
+  }
+
   function getBase64(layer){
     var ancestry = MSImmutableLayerAncestry.ancestryWithMSLayer_(layer);
     var exportRequest = MSExportRequest.exportRequestsFromLayerAncestry_(ancestry).firstObject();
@@ -342,16 +363,20 @@ export function exportAction (context) {
         attrsObj = {},
         attrs = getAttrs(layer);
 
-    if (common.isLayer(layer)) {
-        var boxShadow = getShadows(layer) ? 'box-shadow: ' + getShadows(layer) : 'box-shadow: none';
-        // var radius = 'border-radius: ' + getRadius(layer);
+    attrDelete(attrs, Object.values(nucleonPropNames));
 
-        attrs.splice(attrs.length, 0,
-          'height: ' + layer.frame().height() + 'px',
-          'width: ' + layer.frame().width() + 'px',
-          boxShadow,
-          // radius,
-        );
+    if (common.isLayer(layer) && !isIcon(layer)) {
+      var boxShadow = getShadows(layer) ? 'box-shadow: ' + getShadows(layer) : 'box-shadow: none';
+      var radius = 'border-radius: ' + getRadius(layer);
+
+
+      attrs.splice(attrs.length, 0,
+        'height: ' + layer.frame().height() + 'px',
+        'width: ' + layer.frame().width() + 'px',
+        boxShadow,
+        radius,
+      );
+
     } else if (isIcon(layer)) {
       attrs.splice(attrs.length, 0,
         'extend: ' + 'name',
@@ -360,9 +385,10 @@ export function exportAction (context) {
         'background-image: ' + getBase64(layer),
       );
     }
+
     else if (common.isText(layer)) {
       var attrFontWeight;
-      var textTransform = layer.styleAttributes().MSAttributedStringTextTransformAttribute == 1 ? 'uppercase' : 'lowercase';
+      var textTransform = layer.styleAttributes().MSAttributedStringTextTransformAttribute == 1 ? 'uppercase' : 'none';
 
       attrs.forEach(function(attr) {
         if (common.getPropName(attr) == 'font-family') {
@@ -374,9 +400,12 @@ export function exportAction (context) {
         'extend: ' + 'name',
         // 'line-height: ' + layer.lineHeight() + 'px',// in base sketch functional
         'text-transform: ' + textTransform,
+        'color: ' +  common.rgbaCode(layer.textColor()),
         attrFontWeight,
       );
     }
+
+    var cleanAttrs = dediplicate(attrs);
 
     if (splitName[1] && tagsNames) {
         tagsNames.forEach(function(tag){
@@ -384,24 +413,24 @@ export function exportAction (context) {
             var key = tagName.charAt(0);
             var nucleonPropName = nucleonPropNames[key];
 
-            attrs.forEach(function(attr, index){
+            cleanAttrs.forEach(function(attr, index){
                 if ((common.isText(layer) && key == 't') || key == 'i') {
-                  layerName == 'nucleon' ? nucleonAttrsObj[tagName] = attrs : attrs = getVariable(tag, attrs);
+                  layerName == 'nucleon' ? nucleonAttrsObj[tagName] = cleanAttrs : cleanAttrs = getVariable(tag, cleanAttrs);
                 }
                 else if (common.getPropName(attr) == nucleonPropName){
-                  layerName == 'nucleon' ? nucleonAttrsObj[tagName] = getNucleonPropVal(layer, nucleonPropName, key) : attrs[index] = getVariable(tag, attrs);
+                  layerName == 'nucleon' ? nucleonAttrsObj[tagName] = getNucleonPropVal(layer, nucleonPropName, key) : cleanAttrs[index] = getVariable(tag, cleanAttrs);
                 }
             })
 
             if (layerName != 'nucleon') {
-              nucleonAttrsObj[layerName] = attrs;
+              nucleonAttrsObj[layerName] = cleanAttrs;
             }
         })
     } else {
-      nucleonAttrsObj[layerName] = attrs;
+      nucleonAttrsObj[layerName] = cleanAttrs;
     }
 
-    attrsObj[layerName] = attrs;
+    attrsObj[layerName] = cleanAttrs;
 
     if (common.isText(layer) || layerName == 'nucleon') {
       return nucleonAttrsObj;
