@@ -5,6 +5,24 @@
 
 ![Image alt](https://github.com/levtolstoi/Nucleus/blob/assets/nucleons.jpg?raw=true)
 
+**Нукло́ны** (от лат. nucleus — ядро) — общее название для протонов и нейтронов, из которых состоит ядро атома.
+
+Нуклоны в контексте Nucleus это обычные Sketch слои, каждый из которых хранит в себе определенное свойство, например ширину, высоту, тень и т.д.
+
+![Пример. Нуклон высоты](https://github.com/levtolstoi/Nucleus/blob/assets/nucleons.png?raw=true)
+
+Предусмотрено всего 9 префиксов для тегов:
+* «h-»(height) высота, нуклон;
+* «w-»(width) ширина;
+* «o-» (offset) отступ, обращается к ширине слоя;
+* «r-» (radius) радиус;
+* «s-» (shadow) тень, может хранить как внутреннюю так и внешнюю тень, или обе одновременно (бордеры так же следует хранить в этих нуклонах, так как sketch не умеет создавать бордеры с одной стороны слоя);
+* «b-» (background) хранит цвета для слоев;
+* «t-» (typographic) хранит font-size, font-family, letter-spacing, line-height, text-transform(uppercase/lowercase), font-weight;
+* «с-» (color) цвет текста;
+* «i-» (icon) для иконок. Применив нуклон иконки к любому слою, при синхронизации он заменит его на иконку, в дальнейшем вы можете менять исходную иконку.
+
+
 ## Установка
 Чтобы установить загрузите [zip архив](https://github.com/levtolstoi/Nucleus/releases/download/v1.0.3/Nucleus.sketchplugin.zip) с последним релизом, разархивируйте и дважды щелкните по Nucleus.sketchplugin.
  
