@@ -16,19 +16,17 @@
 ![Пример. Нуклон высоты](https://github.com/levtolstoi/Nucleus/blob/assets/nucleons.png?raw=true)
 
 Предусмотрено всего 9 префиксов для тегов:
-*«h-»* (height) высота, нуклон;
-*«w-»* (width) ширина;
-*«o-»* (offset) отступ, обращается к ширине слоя;
-*«r-»* (radius) радиус;
-*«s-»* (shadow) тень, может хранить как внутреннюю так и внешнюю тень, или обе одновременно (бордеры так же следует хранить в этих нуклонах, так как sketch не умеет создавать бордеры с одной стороны слоя);
-*«b-»* (background) хранит цвета для слоев;
-*«t-»* (typographic) хранит font-size, font-family, letter-spacing, line-height, text-transform(uppercase/lowercase), font-weight;
-*«с-»* (color) цвет текста;
-*«i-»* (icon) для иконок. Применив нуклон иконки к любому слою, при синхронизации он заменит его на иконку, в дальнейшем вы можете менять исходную иконку.
+* **«h-»** (height) высота, нуклон;
+* **«w-»** (width) ширина;
+* **«o-»** (offset) отступ, обращается к ширине слоя;
+* **«r-»** (radius) радиус;
+* **«s-»** (shadow) тень, может хранить как внутреннюю так и внешнюю тень, или обе одновременно (бордеры так же следует хранить в этих нуклонах, так как sketch не умеет создавать бордеры с одной стороны слоя);
+* **«b-»** (background) хранит цвета для слоев;
+* **«t-»** (typographic) хранит font-size, font-family, letter-spacing, line-height, text-transform(uppercase/lowercase), font-weight;
+* **«с-»** (color) цвет текста;
+* **«i-»** (icon) для иконок. Применив нуклон иконки к любому слою, при синхронизации он заменит его на иконку, в дальнейшем вы можете менять исходную иконку.
 
-![Пример. Нуклон высоты](https://github.com/levtolstoi/Nucleus/blob/assets/nucleons.png?raw=true)
-
-*Команда Sync (cmd+shift+i).*
+**Команда Sync (cmd+shift+i).**
 Вы можете синхронизировать свойства между нуклонами и слоями внутри символов с помощью хештегов.
 
 ![Image alt](https://github.com/levtolstoi/Nucleus/blob/assets/sync.gif?raw=true)
