@@ -119,7 +119,129 @@ button-primary-sm — название для группы содержащей 
 
 Все мы знаем команду Copy CSS Attributes в Sketch, соотетственно мы уже понимаем что Sketch уже содержит в себе все данные которые нужны для верстки, однако почему то мы до сих пор пишем css вручную. Nucleus исправляет эту проблему. Если вы правильно создали структуру атомов как описано выше вы можете экспортировать scss map из макета. Один атом - одна map.
 
-![Структура для экспорта](https://github.com/levtolstoi/Nucleus/blob/assets/export-tree.png?raw=true)
+
 ![экспорт](https://github.com/levtolstoi/Nucleus/blob/assets/export.gif?raw=true)
 
+
+Пример экспортируемого кода.
+![Структура для экспорта](https://github.com/levtolstoi/Nucleus/blob/assets/export-tree.png?raw=true)
+```scss
+@import 'nucleons_height';
+  @import 'nucleons_offset';
+  @import 'nucleons_background';
+  @import 'nucleons_typography_sizes';
+  @import 'nucleons_typography_themes';
+  @import 'nucleons_shadow';
+  @import 'nucleons_radius';
+
+  $atom-btn-primary: (
+    active: (
+      btn-primary: (
+        margin: (
+          background: #D8D8D8,
+          border: 1px solid #979797,
+          height: 32px,
+          width: mdg($nucleons_offset, o-sm-xs),
+          border-radius: 0px 0px 0px 0px
+        ),
+        padding: (
+          background: #D8D8D8,
+          border: 1px solid #979797,
+          height: 40px,
+          width: mdg($nucleons_offset, o-md-s),
+          border-radius: 0px 0px 0px 0px
+        ),
+        button: (
+          background: mdg($nucleons_background, b-two-higher),
+          height: mdg($nucleons_height, h-md-l),
+          width: 240px,
+          border-radius: mdg($nucleons_radius, r-sm)
+        ),
+        text: (
+          font-family: mdg($nucleons_typography_sizes, t-button-uppercase-lg, font-family),
+          font-size: mdg($nucleons_typography_sizes, t-button-uppercase-lg, font-size),
+          color: mdg($nucleons_typography_themes, c-primary),
+          letter-spacing: mdg($nucleons_typography_sizes, t-button-uppercase-lg, letter-spacing),
+          text-align: mdg($nucleons_typography_sizes, t-button-uppercase-lg, text-align),
+          line-height: mdg($nucleons_typography_sizes, t-button-uppercase-lg, line-height),
+          extend: 't-button-uppercase-lg',
+          text-transform: mdg($nucleons_typography_sizes, t-button-uppercase-lg, text-transform),
+          font-weight: mdg($nucleons_typography_sizes, t-button-uppercase-lg, font-weight)
+        )
+      )
+    ),
+    hover: (
+      btn-primary: (
+        margin: (
+          background: #D8D8D8,
+          border: 1px solid #979797,
+          height: 32px,
+          width: mdg($nucleons_offset, o-sm-xs),
+          border-radius: 0px 0px 0px 0px
+        ),
+        padding: (
+          background: #D8D8D8,
+          border: 1px solid #979797,
+          height: 40px,
+          width: mdg($nucleons_offset, o-md-s),
+          border-radius: 0px 0px 0px 0px
+        ),
+        button: (
+          background: mdg($nucleons_background, b-two-hi),
+          height: mdg($nucleons_height, h-md-l),
+          width: 240px,
+          border-radius: mdg($nucleons_radius, r-sm)
+        ),
+        text: (
+          font-family: mdg($nucleons_typography_sizes, t-button-uppercase-lg, font-family),
+          font-size: mdg($nucleons_typography_sizes, t-button-uppercase-lg, font-size),
+          color: mdg($nucleons_typography_themes, c-primary),
+          letter-spacing: mdg($nucleons_typography_sizes, t-button-uppercase-lg, letter-spacing),
+          text-align: mdg($nucleons_typography_sizes, t-button-uppercase-lg, text-align),
+          line-height: mdg($nucleons_typography_sizes, t-button-uppercase-lg, line-height),
+          extend: 't-button-uppercase-lg',
+          text-transform: mdg($nucleons_typography_sizes, t-button-uppercase-lg, text-transform),
+          font-weight: mdg($nucleons_typography_sizes, t-button-uppercase-lg, font-weight)
+        )
+      )
+    ),
+    default: (
+      btn-primary: (
+        margin: (
+          background: #D8D8D8,
+          border: 1px solid #979797,
+          height: 32px,
+          width: mdg($nucleons_offset, o-sm-xs),
+          border-radius: 0px 0px 0px 0px
+        ),
+        padding: (
+          background: #D8D8D8,
+          border: 1px solid #979797,
+          height: 40px,
+          width: mdg($nucleons_offset, o-md-s),
+          border-radius: 0px 0px 0px 0px
+        ),
+        button: (
+          background: mdg($nucleons_background, b-two),
+          height: mdg($nucleons_height, h-md-l),
+          width: 240px,
+          border-radius: mdg($nucleons_radius, r-sm)
+        ),
+        text: (
+          font-family: mdg($nucleons_typography_sizes, t-button-uppercase-lg, font-family),
+          font-size: mdg($nucleons_typography_sizes, t-button-uppercase-lg, font-size),
+          color: mdg($nucleons_typography_themes, c-primary),
+          letter-spacing: mdg($nucleons_typography_sizes, t-button-uppercase-lg, letter-spacing),
+          text-align: mdg($nucleons_typography_sizes, t-button-uppercase-lg, text-align),
+          line-height: mdg($nucleons_typography_sizes, t-button-uppercase-lg, line-height),
+          extend: 't-button-uppercase-lg',
+          text-transform: mdg($nucleons_typography_sizes, t-button-uppercase-lg, text-transform),
+          font-weight: mdg($nucleons_typography_sizes, t-button-uppercase-lg, font-weight)
+        )
+      )
+    )
+  )
+;
+
+```
  
