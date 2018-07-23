@@ -113,5 +113,13 @@ button-primary-sm — название для группы содержащей 
 * нельзя использовать одинаковые имена для двух или нескольких слоев в одном и том же символе;
 
 
+## Экспорт данных (cmd+shift+b)
+
+![Схема](https://github.com/levtolstoi/Nucleus/blob/assets/export-scheme.jpg?raw=true)
+
+Все мы знаем команду Copy CSS Attributes в Sketch, соотетственно мы уже понимаем что Sketch уже содержит в себе все данные которые нужны для верстки, однако почему то мы до сих пор пишем css вручную. Nucleus исправляет эту проблему. Если вы правильно создали структуру атомов как описано выше вы можете экспортировать scss map из макета. Один атом - одна map.
+
+![Структура для экспорта](https://github.com/levtolstoi/Nucleus/blob/assets/export-tree.png?raw=true)
+![экспорт](https://github.com/levtolstoi/Nucleus/blob/assets/export.gif?raw=true)
 
  
