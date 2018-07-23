@@ -127,12 +127,12 @@ button-primary-sm — название для группы содержащей 
 ![Структура для экспорта](https://github.com/levtolstoi/Nucleus/blob/assets/export-tree.png?raw=true)
 ```scss
 @import 'nucleons_height';
-  @import 'nucleons_offset';
-  @import 'nucleons_background';
-  @import 'nucleons_typography_sizes';
-  @import 'nucleons_typography_themes';
-  @import 'nucleons_shadow';
-  @import 'nucleons_radius';
+@import 'nucleons_offset';
+@import 'nucleons_background';
+@import 'nucleons_typography_sizes';
+@import 'nucleons_typography_themes';
+@import 'nucleons_shadow';
+@import 'nucleons_radius';
 
   $atom-btn-primary: (
     active: (
