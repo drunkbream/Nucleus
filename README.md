@@ -123,7 +123,7 @@ button-primary-sm — название для группы содержащей 
 ![экспорт](https://github.com/levtolstoi/Nucleus/blob/assets/export.gif?raw=true)
 
 
-Пример экспортируемого кода.
+#### Пример экспортируемого кода.
 ![Структура для экспорта](https://github.com/levtolstoi/Nucleus/blob/assets/export-tree.png?raw=true)
 ```scss
 @import 'nucleons_height';
