@@ -1,7 +1,7 @@
 {
   "author" : "Ivan Belkov",
   "identifier" : "com.example.sketch.4cbb6b0e-b9e1-4d02-9e36-876c63f54e0b",
-  "version" : "1.0.3",
+  "version" : "1.0.6",
   "description" : "Plugin for create Atomic Design concept in Sketch and export with a scss-map for front-end",
   "authorEmail" : "light.n.night@gmail.com",
   "title" : "Nucleus",
