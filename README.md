@@ -1,130 +1,133 @@
-Написание Readme еще в процессе. Docs in progress.
+[Читать на русском](README.md)
 
 # Nucleus sketch plugin
-Инструмент позволяющий создавать атомарный дизайн в Sketch, а также экспортировать данные для верстки из макета в формате scss map. Ориентирован на создание реиспользуемых дизайн систем.
+It is a tool that allows to create an atomic design in Scetch, as well as to export page-making data from the layout as an scss map. It is intended to create re-used design systems.
 
 ![Scheme-nucleons](https://github.com/levtolstoi/Nucleus/blob/assets/scheme-nucleons.jpg?raw=true)
 ![Scheme-atoms](https://github.com/levtolstoi/Nucleus/blob/assets/scheme-atom.jpg?raw=true)
 
-Создание дизайна c Nucleus возможно только при организации гайдлайна и библиотеки компонентов по определенным правилам которые формируют дизайн фреймворк. Это создает единый язык между дизайном и разработкой путем экспорта данных из гайдлайна. За счет экспорта данных организуется синхронизация дизайн-макетов и внешнего вида компонентов в браузере. Это напоминает принципц wysiwyg, однако вы сами определяете как использовать данные в коде.
+With Nucleus, design creation is only available if you organize the guideline and the library of components according to certain rules, which form the framework for design. Thus, the unity of language is set up for the design and the development by exporting data from the guideline. Data export provides synchronization of the design layouts and appearance of the browser’s components. This is close to wysiwyg principle, but you can decide yourself how to use data in the code.
 
-Демо скачать можно [тут](https://github.com/levtolstoi/Nucleus-demo).
+[You can download demo here](https://github.com/levtolstoi/Nucleus-demo).
 
-## Установка
-Чтобы установить загрузите [zip архив](https://github.com/levtolstoi/Nucleus/releases/download/v1.0.3/Nucleus.sketchplugin.zip) с последним релизом, разархивируйте и дважды щелкните по Nucleus.sketchplugin.
+## Installation
+To install, download a [zip-archive](https://github.com/levtolstoi/Nucleus/releases/download/v1.0.3/Nucleus.sketchplugin.zip) containing the latest release, extract it and click twice on Nucleus.sketchplugin.
 
-
-## Нуклоны и синхронизация
-Атомарный дизайн в контексте плагина расширен более мелкими частицами — нуклонами(nucleon), применение которых полностью замещает собой Sketch styles и Sketch text styles c помощью хэштегов в имени слоя. Вследствии этого обновленный концепт выглядит следующим образом:
+## Nucleons and Synchronization
+In the plugin’s context, atomic design is expanded with smaller particles — nucleons, which can totally replace Sketch Styles and Sketch Text Styles when used with hashtags in the layer name. So that is how the updated concept looks like:
 
 ![Image alt](https://github.com/levtolstoi/Nucleus/blob/assets/nucleons.jpg?raw=true)
 
-**Нукло́ны** (от лат. nucleus — ядро) — общее название для протонов и нейтронов, из которых состоит ядро атома.
+**Nucleons** (derived from Latin) are either protons or neutrons, which construct an atomic nucleus.
 
-Нуклоны в контексте Nucleus это обычные Sketch слои, каждый из которых хранит в себе определенное свойство, например ширину, высоту, тень и т.д.
+In the context of Nucleus, nucleons are regular Sketch layers, each of which stores a certain property, for example, width, height, shadow, etc.
 
-![Пример. Нуклон высоты](https://github.com/levtolstoi/Nucleus/blob/assets/nucleons.png?raw=true)
+![Example height](https://github.com/levtolstoi/Nucleus/blob/assets/nucleons.png?raw=true)
 
-Предусмотрено всего 9 префиксов для тегов:
-* **«h-»** (height) высота;
-* **«w-»** (width) ширина;
-* **«o-»** (offset) отступ, обращается к ширине слоя;
-* **«r-»** (radius) радиус;
-* **«s-»** (shadow) тень, может хранить как внутреннюю так и внешнюю тень, или обе одновременно (бордеры так же следует хранить в этих нуклонах, так как sketch не умеет создавать бордеры с одной стороны слоя);
-* **«b-»** (background) хранит цвета для слоев;
-* **«t-»** (typographic) хранит font-size, font-family, letter-spacing, line-height, text-transform(uppercase/lowercase), font-weight;
-* **«с-»** (color) цвет текста;
-* **«i-»** (icon) для иконок. Применив нуклон иконки к любому слою, при синхронизации он заменит его на иконку, в дальнейшем вы можете менять исходную иконку.
+There are in total 9 tag prefixes available:
+* **«h-»** (height);
+* **«w-»** (width);
+* **«o-»** (offset): indent, refers to the layer width;
+* **«r-»** (radius);
+* **«s-»** (shadow): may store an inner shadow as well as outer one or both of them at once (the borders should also be stored at those nucleons, as sketch cannot create borders at only one of the layers side);
+* **«b-»** (background): allows you to store the layers colors;
+* **«t-»** (typographic): allows you to store font-size, font-family, letter-spacing, line-height, text-transform (uppercase/lowercase), font-weight;
+* **«с-»** (color) text color;
+* **«i-»** (icon): for icons. If you apply this nucleon to any layer, it will be replaced with an icon when synchronized; the original icon may be changed further.
 
 
-## Команда Sync (cmd+shift+i).
-Вы можете синхронизировать свойства между нуклонами и слоями внутри символов с помощью хештегов.
+## Sync Command (cmd+shift+i)
+You may synchronize the properties of nucleons and layers inside the symbols through hashtags.
 
 ![Image alt](https://github.com/levtolstoi/Nucleus/blob/assets/sync.gif?raw=true)
 
-Вот как это работает:
+That is how it works:
 
 ![Image alt](https://github.com/levtolstoi/Nucleus/blob/assets/sync-scheme.jpg?raw=true)
 
 
-### Создание нуклонов
-Для того чтобы создать нуклоны, необходимо создать artboard с именем Nucleons(обязательно). Это имя создает область видимости для синхронизации свойств нуклонов с свойствами слоев внутри Sketch symbols, к которым были применены теги. 
+### Creating Nucleons
+To make nucleons, you first need to create an artboard named Nucleons (necessarily). This name provides an area of visibility for synchronizing the nucleons and layers properties in Sketch symbols to which the tags have been applied to.
 
-Видео тутор на youtube:
+Video tutorial on Youtube:
 
 [![Nucleus create nucleons](https://img.youtube.com/vi/wEt_Y7tL2cw/0.jpg)](https://youtu.be/wEt_Y7tL2cw)
 
-Артборд с нуклонами является своеобразной «базой данных» элементарных частиц, механика  взаимодействия с которыми заложена в их наименовании и имеет вид:
+Nucleons artboard appears to be a kind of elementary particles database, and the mechanisms of interaction with them are laid in their names, and that is how it looks like:
 
 **nucleon#h-sm-s**
 
-В данном примере:
-* «nucleon» обязательное имя с помощью которого Nucleus обращается к данному слою за тем или иным свойством слоя(обязательно);
-* '#' символ(хэштег/диез/октоторп) отделяющий имя слоя от тега(обязательно);
-* «h-» префикс указывающий какое именно свойство забирать с нуклона(в данном примере h- это высота);
-* «sm-s» уникальное имя(может быть любым). Рекомендуется давать абстрактные имена(например sm-xs, sm-m, sm-xlg-xl).
+In this example:
+* «nucleon» is a necessary name through which Nucleus refers to the proper layer for some of the layer properties (necessarily);
+* '#' symbol (hashtag/sharp/octothorpe) separates the layer name from the tag (necessarily);
+* «h-» is a prefix that indicates which exactly property should be derived from the nucleon (in this example h is height);
+* «sm-s» is a unique name (may be any one). It is recommended to use abstract names (e. g. sm-xs, sm-m, sm-xlg-xl).
 
 ---
-**Свойства нуклонов могут синхронизироваться лишь со слоями(в названии которых есть их теги) внутри master symbols находящимися на странице символов.**
+**Nucleons properties may only be synchronized to layers (if there are tags in their names) in the master symbols, which can be found at the symbols page.**
 ---
 
-Разберем создание нуклона на примере нуклона высоты (h-):
-1. На артборде с именем «Nucleons» создаем Sketch group с именем «nucleons_name», в нашем случае «nucleons_height». На самом деле имя группы может быть любым, но вы можете называть по своему, однако, рекомендуется придерживаться единого стиля.
-2. В группе создаем слои с именем nucleon и хештегом обозначающим свойство, раз мы создаем нуклоны высоты то это «nucleon#h-имя-высоты».
-3. В группе nucleons_name не может быть никаких других слоев кроме nucleon(всяческие графические украшательства и пояснения делаем вне группы).
-4. Не может быть двух одинаковых нуклонов, один нуклон — один слой(кроме иконок — нуклоны иконок это Sketch group, но правила те же).
-5. Следует создавать все типы нуклонов чтобы полностью покрыть ими слои атомов для дальнейшей синхронизации.
-6. Нуклонов можно создавать сколько угодно, главное чтобы вы организовали это так, чтобы сами в них не запутались.
+Let’s consider how to create a nucleon using a nucleon of height (h-) as an example:
 
-## Создание атомов
-Концепция атомарного дизайна рассматривает атомы как целостные независимые единицы не имеющие смысла сами по себе, но при этом контекст их использования предполагается. Поэтому стараемся снижать реиспользуемость атома, пусть лучше будет больше сильно похожих друг на друга(это называется «совпадение»), это повышает точечный контроль применения. Не забываем что атомы будут верстаться каждый отдельно, точно так же как в гайдлайне.
+1. At the artboard named “Nucleons” create a Sketch group named “nucleons_name”; in our case, “nucleons_height”. In fact, it can be called any way, you can use your own ideas, but it is recommended to hold on a uniform style.
 
-Видео тутор на youtube:
+2. In the group create layers named nucleon with a hashtag designating the property. As far as we are creating a height nucleon, the name will be “nucleon#h-heigh-name”.
+
+3. In the nucleons_name group, there cannot be any other layers except of nucleon (add any graphical tips and comments you like outside the group).
+
+There cannot be two similar nucleons: a nucleon corresponds to a layer (except of icons: icons’ nucleons are Sketch groups, but the rules are same).
+
+4. All the nucleons’ types should be created to cover the full atomic layers for the further synchronization.
+Any number of nucleons may be created as long as you don’t get confused with them.
+
+## Creating an Atom
+The concept of an atomic design considers atoms as some whole and independent items which have no sense on their own, but the context of their usage is assumed. For this reason, try to reduce the atom re-using. It is better to create more numerous nucleons that look mostly similar to each other (it is called “matching”) – that increases the abilities for spot control of the usage. Don’t forget that every atom is going to be considered individually in the page-making process, just like in a guideline.
+
+Video tutorial on youtube:
 
 [![Nucleus create nucleons](https://img.youtube.com/vi/JMWxw-i4V-M/0.jpg)](https://youtu.be/JMWxw-i4V-M)
 
-Если вы создали artboard с именем Nucleons, для атомов следует создать отдельный.
+If you have created an artboard named Nucleons, you should create another one especially for atoms.
 
-Очень важно определиться со структурой дерева слоев и придерживаться ее постоянно при создании новых атомов, предлагается следующая:
-* Каждый атом должен быть символом. 
-* Default, active, hover, это состояния атома. 
-* Cостояний может быть сколько угодно. 
-* Создание атомов-состояний для каждого экземпляра атома строго обязательно.
+It is essential to decide the structure of the layer tree and hold on it constantly when creating new atoms. The structure suggested is:
+* Every atom should be a symbol.
+* Default, active, hover are atom’s states.
+* There can be any number of atom’s states.
+* State atoms creation is strictly necessary for every atom item.
 
-Каждый отдельный символ в группе атома называется экземпляром атома.
+Every single symbol in the atom group is called an atom item. 
 
-Заглянем внутрь атома:
+If we look inside an atom:
 ![Слои атома](https://github.com/levtolstoi/Nucleus/blob/assets/inside-atom.png?raw=true)
 
-«button / primary / sm / default» — имя / тема / размер / состояние. Cлэши необходимы для дальнейшей удобной навигации в библиотеке символов.
+«button / primary / sm / default» — name / theme / size / state. The slashes are necessary for the convenience of further navigation in the symbol library.
 
-button-primary-sm — название для группы содержащей слои атома, обязательно без пробелов, указание состояния опускается. Группа, обертывающая слои обязательна, и должна оборачивать все слои в символе. Будьте внимательны, именно такое имя атом получит при верстке, если разработчик не пожелает изменить его в коде, поэтому будьте последовательными, и не приписывайте название состояния.
+"button-primary-sm" is a name for a group which contains the atom layers. It must have no spaces; the state indication should be skipped. The group wrapping the layers is necessary and should wrap all the layers in the symbol. Be attentive: that is the name that the atom is going to get during the page making, if the developer doesn’t change it in the code. That is why you should act consistently, not attributing state’s names to the atoms.
 
-**Подробно про слои**
+### Layers in Detail
+The layers names consist of two parts. Everything that is written before the first #-symbol is called a layer name, and everything after the symbol is a nucleon chain. The mail rule is: no spaces.
 
-Имена слоев состоят из двух частей. Все что пишется до первого #-символа называется именем слоя, все что после — цепью нуклонов. Главное правило — никаких пробелов.
-	
-Следует запомнить: количество базовых слоев в каждом экземпляре атома одного типа не может меняться, как и их имена, это шаблон, но кроме базовых вы можете добавлять дополнительные слои(например иконку) от экземпляра к экземпляру. При этом этом нуклоны, их порядок и тип — могут изменяться как угодно. Однако не следует назначать текстовые атомы обычным слоям и наоборот.
+You should remember that the number of the basic layers in any atom item of one type cannot be changed as well as their names, as that is a template. But you can also add extra layers (e. g. an icon) from one item to another. Meanwhile, nucleons, their type and order may me changed in any ways. However, you shouldn’t designate text atoms as ordinary layers or vice versa.
 
-В данном примере представлены слои с именем offset. Хештегом с префиксом #o- как мы помним, является нуклон несущий через свою ширину размер отступа. Эти слои более важны для разработчиков при экспорте кода атома. К сожалению Sketch не предоставляет никаких способов реализации отступов.
+In this example layers named offset are presented. As we remember, the hashtag with #o- prefix is a nucleon that has an indent size through all its width. Those layers are more important for the developers in the exporting atoms code. Unfortunately, Sketch offers no abilities to make indents.
 
-Повторим обязательные правила:
-* стремимся снижать функциональность атома, лучше больше чем универсальней;
-* синхронизация свойств между слоями нуклонов и слоями в атомах происходит лишь если атом является символом;
-* создаем атомы на отдельном на отдельных артобрдах, а не на том что несет в себе нуклоны;
-* пробелы допустимы только в названии атом-символа;
-* слои атом-символа всегда должны быть обернуты в группу с названием атома, в названии может меняться только модификатор размера, для отдельной темы создаем отдельный атом;
-* отображение состояний обязательно, даже если оно одно нужно создавать группу(причина станет более очевидной когда вы прочтете раздел про генерацию css);
-* слои имеют читабельные имена без пробелов и повторяющиеся от экземпляра к экземпляру атом-символа;
-* в каждом экземпляре атом-символа всегда одинаковое количество слоев;
-* нельзя использовать одинаковые имена для двух или нескольких слоев в одном и том же символе;
+Let’s skim the necessary rules:
+* aim at reducing atom’s functionality: better create more numerous rather than universal ones;
+* properties synchronization between the layers of nucleons and layers of atoms only processes if the atom is a symbol;
+* create atoms at the separated artboards, not at those which already have nucleons;
+* spaces are allowed only in the name of a symbol atom;
+* layers of a symbol atom should always be wraped in a group with name of the atom; only the size modifier may be changed in the name of an atom; create a new atom for a new theme;
+* display of states is necessary: even if there is only one state, you should create a group (the reason will seem obvious when you read a section on css generation);
+* names of layers should be readable and have no spaces, they are repeated from item to an item of the symbol atom;
+* there is always similar number of layers in every item of symbol atom;
+* you cannot use similar names for two or more layers at one symbol.
 
 
-## Экспорт данных (cmd+shift+b)
+## Data Export (cmd+shift+b)
 
 ![Схема](https://github.com/levtolstoi/Nucleus/blob/assets/export-scheme.jpg?raw=true)
 
-Все мы знаем команду Copy CSS Attributes в Sketch, соотетственно мы уже понимаем что Sketch уже содержит в себе все данные которые нужны для верстки, однако почему то мы до сих пор пишем css вручную. Nucleus частично исправляет эту проблему. Если вы правильно создали структуру атомов как описано выше вы можете экспортировать scss map из макета. Один атом - одна map.
+We all know the Copy CSS Attributes command in Sketch, so we already realize that Sketch contains all the data necessary for the page-making. Still, for some reason we write css manually. Nucleous partly fixes that. If you have created the atoms structure properly, as it is described above, you can export scss map from the layout: one atom for one map.
 
 
 ![экспорт](https://github.com/levtolstoi/Nucleus/blob/assets/export.gif?raw=true)
