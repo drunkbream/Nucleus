@@ -1,4 +1,4 @@
-[Читать на русском](README.md)
+[Читать на русском](README.ru.md)
 
 # Nucleus sketch plugin
 It is a tool that allows to create an atomic design in Scetch, as well as to export page-making data from the layout as an scss map. It is intended to create re-used design systems.
