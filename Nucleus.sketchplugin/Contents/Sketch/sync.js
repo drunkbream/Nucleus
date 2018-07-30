@@ -320,6 +320,15 @@ function syncAction(context) {
     });
   }
 
+  function rebuildConstraint(slave, master) {
+    slave.hasFixedHeight = master.hasFixedHeight();
+    slave.hasFixedWidth = master.hasFixedWidth();
+    slave.hasFixedLeft = master.hasFixedLeft();
+    slave.hasFixedTop = master.hasFixedTop();
+    slave.hasFixedRight = master.hasFixedRight();
+    slave.hasFixedBottom = master.hasFixedBottom();
+  }
+
   function setIcon(layer, value) {
     var layerParent = layer.parentGroup();
     var xPos = layer.frame().x();
@@ -330,7 +339,23 @@ function syncAction(context) {
     dup.name = layer.name();
     dup.frame().x = xPos;
     dup.frame().y = yPos;
+    rebuildConstraint(dup, layer);
     layerParent.addLayers([dup]);
+  }
+
+  function getBackground(layer) {
+    var firstFill = layer.style().firstEnabledFill();
+    return firstFill;
+  }
+
+  function setBackground(layer, value) {
+    var firstFill = layer.style().firstEnabledFill();
+
+    if (value.fillType() == 1) {
+      firstFill = value;
+    } else if (value.fillType() == 0) {
+      firstFill.color = value.color();
+    }
   }
 
   function nucleonProps(nucleon) {
@@ -340,7 +365,7 @@ function syncAction(context) {
       h: key == 'h' ? nucleon.frame().height() : null,
       w: key == 'w' ? nucleon.frame().width() : null,
       o: key == 'o' ? nucleon.frame().width() : null,
-      b: key == 'b' ? nucleon.style().firstEnabledFill().color() : null,
+      b: key == 'b' ? getBackground(nucleon) : null,
       c: key == 'c' ? nucleon.textColor() : null,
       t: key == 't' ? getTextProps(nucleon) : null,
       s: key == 's' ? getShadowNucleonsValues(nucleon) : null,
@@ -414,14 +439,32 @@ function syncAction(context) {
 
   function setSyncProps(layer, tagName, key) {
     var value = new Object(nucleonValues[tagName]);
+    var parentArtboard = layer.parentArtboard();
+    var parentGroup = layer.parentGroup();
     key == 'h' ? layer.frame().height = value[key] : null;
     key == 'w' || key == 'o' ? layer.frame().width = value[key] : null;
-    key == 'b' ? layer.style().firstEnabledFill().color = value[key] : null;
+    key == 'b' ? setBackground(layer, value[key]) : null; // key == 'b' ? layer.style().firstEnabledFill().color = value[key] : null;
+
     key == 'c' ? layer.setTextColor(value[key]) : null;
     key == 't' ? setTextProps(layer, value[key]) : null;
     key == 's' ? setShadows(layer, value[key]) : null;
     key == 'r' ? setRadius(layer, value[key]) : null;
     key == 'i' ? setIcon(layer, value[key]) : null;
+
+    if (_common__WEBPACK_IMPORTED_MODULE_0__["isSymbolMaster"](parentArtboard) && (key == 'h' || key == 'w')) {
+      parentGroup.select_byExpandingSelection(true, true);
+
+      if (key == 'h') {
+        parentGroup.frame().height = value[key];
+      } else if (key == 'w') {
+        parentGroup.frame().width = value[key];
+      }
+
+      parentArtboard.resizeToFitChildrenWithOption(1);
+      parentArtboard.resizesContent();
+      doc.actionsController().actionForID("MSResizeArtboardToFitAction").doPerformAction(nil);
+      parentGroup.layerDidEndResize();
+    }
   }
 
   sync(syncLayers);
