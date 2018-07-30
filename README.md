@@ -11,7 +11,7 @@ With Nucleus, design creation is only available if you organize the guideline an
 [You can download demo here](https://github.com/levtolstoi/Nucleus-demo).
 
 ## Installation
-To install, download a [zip-archive](https://github.com/levtolstoi/Nucleus/releases/download/v1.0.4/Nucleus.sketchplugin.zip) containing the latest release, extract it and click twice on Nucleus.sketchplugin.
+To install, download a [zip-archive](https://github.com/levtolstoi/Nucleus/releases/latest) containing the latest release, extract it and click twice on Nucleus.sketchplugin.
 
 ## Nucleons and Synchronization
 In the plugin’s context, atomic design is expanded with smaller particles — nucleons, which can totally replace Sketch Styles and Sketch Text Styles when used with hashtags in the layer name. So that is how the updated concept looks like:
