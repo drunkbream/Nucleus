@@ -260,8 +260,8 @@ export function syncAction (context) {
             parentGroup.frame().width = value[key];
           }
           parentArtboard.resizeToFitChildrenWithOption(1);
-          parentArtboard.resizesContent();
           doc.actionsController().actionForID("MSResizeArtboardToFitAction").doPerformAction(nil);
+          parentArtboard.resizesContent();
           parentGroup.layerDidEndResize();
         }
     }

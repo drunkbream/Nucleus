@@ -461,8 +461,8 @@ function syncAction(context) {
       }
 
       parentArtboard.resizeToFitChildrenWithOption(1);
-      parentArtboard.resizesContent();
       doc.actionsController().actionForID("MSResizeArtboardToFitAction").doPerformAction(nil);
+      parentArtboard.resizesContent();
       parentGroup.layerDidEndResize();
     }
   }
