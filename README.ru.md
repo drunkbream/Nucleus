@@ -9,7 +9,7 @@
 Демо скачать можно [тут](https://github.com/levtolstoi/Nucleus-demo).
 
 ## Установка
-Чтобы установить загрузите [zip архив](https://github.com/levtolstoi/Nucleus/releases/download/v1.0.3/Nucleus.sketchplugin.zip) с последним релизом, разархивируйте и дважды щелкните по Nucleus.sketchplugin.
+Чтобы установить загрузите [zip архив](https://github.com/levtolstoi/Nucleus/releases/latest) с последним релизом, разархивируйте и дважды щелкните по Nucleus.sketchplugin.
 
 
 ## Нуклоны и синхронизация
